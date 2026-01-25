@@ -38,7 +38,9 @@
 	"orientation": "inherit",
 	"modules": [
 	    "network",
-	    "pulseaudio"
+	    "pulseaudio",
+	    "custom/brightness",
+	    "custom/notification"
 	]
     },
 
@@ -134,6 +136,36 @@
         "scroll-step": 1,
         "on-click": "pavucontrol",
         "ignored-sinks": ["Easy Effects Sink"]
+    },
+
+    "custom/brightness": {
+        "format": "󰃟 {}%",
+        "exec": "cat /tmp/monitor_brightness 2>/dev/null || echo 50",
+        "interval": 1, 
+        "on-scroll-up": "~/.config/waybar/scripts/brightness.sh +",
+        "on-scroll-down": "~/.config/waybar/scripts/brightness.sh -",
+        "tooltip": false
+    },
+
+    "custom/notification": {
+        "tooltip": true,
+        "format": "<span size='16pt'>{icon}</span>",
+        "format-icons": {
+            "notification": "󱅫",
+            "none": "󰂜",
+            "dnd-notification": "󰂠",
+            "dnd-none": "󰪓",
+            "inhibited-notification": "󰂛",
+            "inhibited-none": "󰪑",
+            "dnd-inhibited-notification": "󰂛",
+            "dnd-inhibited-none": "󰪑"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
     },
 
     "custom/power": {
