@@ -1,7 +1,7 @@
 @define-color text            #cdd6f4;
-@define-color background-alt  alpha(#2c2542, 1);
+@define-color background-alt  alpha(#1E1E2E, 1);
 @define-color selected        #aca3c9;
-@define-color hover           alpha(#2c2542, .4);
+@define-color hover           alpha(#aca3c9, .4);
 @define-color urgent          #FF0000;
 
 * {
@@ -24,8 +24,8 @@
 /* CONTROL CENTER ------------------------------------------------------------------------ */
 
 .control-center {
-  background-color: alpha(@background-alt, 0.5); 
-  border-radius: 20px;
+  background-color: alpha(@background-alt, 0.8); 
+  border-radius: 15px;
   border: 1px solid @selected;
   margin: 18px;
   padding: 12px;
@@ -136,7 +136,7 @@ progressbar {
 }
 
 .widget-title button {
-  background: @background-alt;
+  background: alpha(@background-alt, 0.7);
   border-radius: 6px;
   padding: 4px 16px;
 }
@@ -156,7 +156,7 @@ progressbar {
 }
 
 .widget-dnd > switch {
-  background: @background-alt;
+  background: alpha(@background-alt, 0.7);
   font-size: initial;
   border-radius: 8px;
   box-shadow: none;
@@ -186,7 +186,7 @@ progressbar {
   padding: 6px 2px;
   margin: 6px;
   border-radius: 12px;
-  background: @background-alt;
+  background: alpha(@background-alt, 0.7);
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button {
@@ -203,7 +203,7 @@ progressbar {
 
   /* Music player */
 .widget-mpris {
-    background: @background-alt;
+    background: alpha(@background-alt, 0.7);
     border-radius: 16px;
     color: @text;
     margin:  20px 6px;
