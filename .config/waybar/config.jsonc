@@ -87,7 +87,9 @@
         "rotate": 0,
         "format-icons": {
             "activated": "\udb80\udd76",
-            "deactivated": "\udb81\udeca"
+            "deactivated": "\udb81\udeca",
+	    "on-scroll-up": "",
+            "on-scroll-down": ""
         },
         "tooltip": "true",
         "tooltip-format-activated": "<span foreground='#98c379'>\udb80\udd76 Caffeine Mode Active</span>\nPrevents system from going to sleep",
@@ -96,7 +98,9 @@
 
     "clock": {
 	"format": "{:%I:%M %p}",
-        "format-alt": "{:%a,%d.%b %H:%M}"
+        "format-alt": "{:%a,%d.%b %H:%M}",
+	"on-scroll-up": "",
+        "on-scroll-down": ""
     },
 
     "tray": {
@@ -139,7 +143,7 @@
     },
 
     "custom/brightness": {
-        "format": "󰃟 {}%",
+        "format": "󰃟 {}",
         "exec": "cat /tmp/monitor_brightness 2>/dev/null || echo 50",
         "interval": 1, 
         "on-scroll-up": "~/.config/waybar/scripts/brightness.sh +",
@@ -149,10 +153,10 @@
 
     "custom/notification": {
         "tooltip": true,
-        "format": "<span size='16pt'>{icon}</span>",
+        "format": "{icon}",
         "format-icons": {
             "notification": "󱅫",
-            "none": "󰂜",
+            "none": "󰂜 ",
             "dnd-notification": "󰂠",
             "dnd-none": "󰪓",
             "inhibited-notification": "󰂛",
