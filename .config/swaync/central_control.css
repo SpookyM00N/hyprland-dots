@@ -27,6 +27,7 @@
   background-color: alpha(@background-alt, 0.8); 
   border-radius: 15px;
   border: 1px solid @selected;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,1);
   margin: 18px;
   padding: 12px;
 }

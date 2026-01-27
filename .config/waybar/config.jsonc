@@ -118,8 +118,8 @@
       },
 
     "pulseaudio": {
-        "format": "{icon} {volume}",
-        "format-bluetooth": "{icon} {volume}",
+        "format": "{icon}{volume}",
+        "format-bluetooth": "{icon}{volume}",
         "format-muted": "",
         "format-icons": {
             "alsa_output.pci-0000_00_1f.3.analog-stereo": "",
@@ -139,7 +139,7 @@
     },
 
     "custom/brightness": {
-        "format": "󰃟 {}%",
+        "format": "󰃟{}%",
         "exec": "cat /tmp/monitor_brightness 2>/dev/null || echo 50",
         "interval": 1, 
         "on-scroll-up": "~/.config/waybar/scripts/brightness.sh +",

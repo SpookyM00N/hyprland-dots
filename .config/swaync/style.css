@@ -1,2 +1,5 @@
 @import 'notifications.css';
 @import 'central_control.css';
+ *{
+	font-family: "JetBrains Mono Nerd Font Propo"
+}

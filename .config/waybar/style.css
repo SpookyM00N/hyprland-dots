@@ -1,7 +1,7 @@
 *{
     border: none;
     border-radius: 0;
-    font-family: "JetBrainsMono NF";
+    font-family: "JetBrains Mono Nerd Font Propo";
     font-size: 14px;
     min-height: 0;
 }
@@ -23,7 +23,7 @@ tooltip label {
 }
 
 #idle_inhibitor, #clock {
-    padding: 4px 7px;
+    padding: 4px 3px;
 }
 
 #network, #pulseaudio, #custom-brightness, #custom-notification {
@@ -78,7 +78,7 @@ tooltip label {
     background-color: rgba(30, 30, 46, 0.85);
     color: #cdd6f4;
     border-radius: 20px;
-    padding: 4px 15px;
+    padding: 4px 5px;
     margin: 3px 10px 3px 10px;
 }
 
