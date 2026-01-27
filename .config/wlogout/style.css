@@ -9,7 +9,6 @@ window {
 
 button {
         border-radius: 14px;
-        text-decoration-color: #FFFFFF;
 	color: #FFFFFF;
 	border: none;
         background-color: alpha(#1E1E2E, 0.8);
@@ -25,7 +24,7 @@ button:focus, button:active {
 }
 
  button:hover {
-        background-color: #aca3c9;
+        background-color: #aca3c9; 
         background-size: 30%;
         outline-style: none;
 	animation: gradient_f 20s ease-in infinite;

@@ -24,7 +24,7 @@
 /* CONTROL CENTER ------------------------------------------------------------------------ */
 
 .control-center {
-  background-color: alpha(@background-alt, 0.8); 
+  background-color: alpha(@background-alt, 0.6); 
   border-radius: 15px;
   border: 1px solid @selected;
   box-shadow: 0 0 5px 0 rgba(0,0,0,1);

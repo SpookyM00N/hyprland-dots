@@ -56,7 +56,7 @@ tooltip label {
 }
 
 #workspaces button.active {
-    background: #aca3c9;
+    background-color: #aca3c9;
     color: #000000;
     border-radius: 20px;
     margin: 5px 5px;
