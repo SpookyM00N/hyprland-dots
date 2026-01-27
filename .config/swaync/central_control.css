@@ -97,6 +97,22 @@ progressbar {
   background-color: rgba(255,255,255,.1);
 }
 
+
+trough highlight {
+    background: @selected;
+}
+scale trough {
+    margin: 0rem 1rem;
+    background-color: @background-alt;
+    min-height: 8px;
+    min-width: 70px;
+}
+
+slider {
+    background-color: @selected;
+}
+
+
 /* Notifications expanded-group */
 
 .notification-group {
@@ -249,11 +265,11 @@ picture.mpris-background {
   opacity: 0;
 }
 
-/* Volume */
+/* Volume */ 
 .widget-volume {
-  background: @background-sec;
-  color: @background;
-  padding: 4px;
+  background: alpha(@background-alt, 0.7);
+  color: @selected;
+  padding: 10px;
   margin: 6px;
   border-radius: 6px;
 }

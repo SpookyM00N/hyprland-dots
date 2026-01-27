@@ -140,7 +140,7 @@
 
     "custom/brightness": {
         "format": "󰃟{}%",
-        "exec": "cat /tmp/monitor_brightness 2>/dev/null || echo 50",
+        "exec": "cat /tmp/monitor_brightness 2>/dev/null || echo 100",
         "interval": 1, 
         "on-scroll-up": "~/.config/waybar/scripts/brightness.sh +",
         "on-scroll-down": "~/.config/waybar/scripts/brightness.sh -",

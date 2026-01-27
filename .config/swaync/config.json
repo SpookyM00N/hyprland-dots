@@ -44,6 +44,7 @@
     "label",
     "buttons-grid",
     "mpris",
+    "volume",
     "title",
     "dnd",
     "notifications"
@@ -66,18 +67,22 @@
       "image-radius": 12
     },
     "volume": {
-      "label": "󰕾",
-        "show-per-app": true
+      "label": " 󰕾 ",
+      "expand-button-label": " ",
+      "collapse-button-label": " ",
+      "show-per-app": true,
+      "show-per-app-icon": true,
+      "show-per-app-label": false
     },
     "buttons-grid": {
       "actions": [
         {
           "label": " ",
-          "command": "amixer set Master toggle"
+          "command": "pavucontrol"
         },
         {
           "label": "",
-          "command": "amixer set Capture toggle"
+          "command": "pavucontrol -t 4"
         },
         {
           "label": " ",
