@@ -217,7 +217,6 @@ slider {
   background: @hover;
 }
 
-
   /* Music player */
 .widget-mpris {
     background: alpha(@background-alt, 0.7);
@@ -227,6 +226,7 @@ slider {
 }
 
   /* NOTE: Background need *opacity 1* otherwise will turn into the album art blurred  */
+
 .widget-mpris-player {
     background-color: @background-sec;
     border-radius: 22px;

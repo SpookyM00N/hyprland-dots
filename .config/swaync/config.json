@@ -77,7 +77,7 @@
     "buttons-grid": {
       "actions": [
         {
-          "label": " ",
+          "label": "",
           "command": "pavucontrol"
         },
         {
@@ -85,7 +85,7 @@
           "command": "pavucontrol -t 4"
         },
         {
-          "label": " ",
+          "label": "",
           "command": "nm-connection-editor"
         },
         {
