@@ -37,7 +37,7 @@ tooltip label {
 #pillleft1 {
     background-color: rgba(30, 30, 46, 0.85);
     border-radius: 20px;
-    color: #cdd6f4;
+    color: #aca3c9;
     padding: 0 10px;
     margin: 3px 10px 3px 10px;
 }
@@ -50,7 +50,7 @@ tooltip label {
     margin-bottom: 5px; 
     padding-left: 5px;
     padding-right: 5px;
-    color: #FFFFFF;
+    color: #aca3c9;
     animation: ws_normal 20s ease-in-out 1;
 }
 
@@ -75,7 +75,7 @@ tooltip label {
 
 #pillleft2, #pillcenter, #pillright, #pillright1, #pillright2 {
     background-color: rgba(30, 30, 46, 0.85);
-    color: #cdd6f4;
+    color: #aca3c9;
     border-radius: 20px;
     padding: 4px 5px;
     margin: 3px 10px 3px 10px;
@@ -99,7 +99,7 @@ tooltip label {
 
 #taskbar button.active {
     background: #aca3c9;
-    color: #000000;
+    color: rgba(30, 30, 46, 0.85);
     border-radius: 20px;
     margin-left: 5px;
     padding-left: 5px;
@@ -111,9 +111,13 @@ tooltip label {
 
 #taskbar button:hover {
     background: #2c2542;
-    color: #FFFFFF;
+    color: #aca3c9;
     border-radius: 20px;
     animation: tb_hover 20s ease-in-out 1;
     transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
+#custom-power:hover {
+    background: #2c2542;
+    border-radius: 20px;
+}
