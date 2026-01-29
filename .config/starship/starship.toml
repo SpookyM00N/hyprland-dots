@@ -7,10 +7,11 @@ $directory\
 $git_branch\
 $git_state\
 $git_status\
-$cmd_duration\
 $line_break\
 $python\
 $character"""
+
+right_format = "$cmd_duration"
 
 [directory]
 style = "blue"
@@ -23,7 +24,7 @@ vimcmd_symbol = "[❮](green)"
 [git_branch]
 #disabled = true
 format = "[$branch]($style)"
-style = "bright-black"
+style = "green"
 
 [git_status]
 #disabled = true
@@ -42,8 +43,9 @@ format = '\([$state( $progress_current/$progress_total)]($style)\) '
 style = "bright-black"
 
 [cmd_duration]
+min_time = 0
 format = "[$duration]($style) "
-style = "yellow"
+style = "bold yellow"
 
 [python]
 format = "[$virtualenv]($style) "

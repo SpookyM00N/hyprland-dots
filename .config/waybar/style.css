@@ -21,7 +21,7 @@ tooltip label {
   color: white;
 }
 
-#idle_inhibitor, #clock {
+#idle_inhibitor, #clock, #custom-hyprsunset {
     padding: 4px 3px;
 }
 
@@ -121,3 +121,4 @@ tooltip label {
     background: #2c2542;
     border-radius: 20px;
 }
+
