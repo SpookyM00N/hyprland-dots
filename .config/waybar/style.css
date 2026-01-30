@@ -14,8 +14,8 @@ window#waybar {
 }
 
 tooltip {
-    background: rgba(43, 48, 59, 0.5);
-    border: 1px solid rgba(100, 114, 125, 0.5);
+    background: rgba(30, 30, 46, 0.85);;
+    border: 1px solid #aca3c9;
 }
 tooltip label {
   color: white;
@@ -75,6 +75,7 @@ tooltip label {
 
 #pillleft2, #pillcenter, #pillright, #pillright1, #pillright2 {
     background-color: rgba(30, 30, 46, 0.85);
+    min-width: 20px;
     color: #aca3c9;
     border-radius: 20px;
     padding: 4px 5px;
@@ -122,3 +123,11 @@ tooltip label {
     border-radius: 20px;
 }
 
+#custom-hyprsunset.on {
+    color: #ffb86c; /* Warm Orange/Yellow */
+    border-radius: 10px;
+}
+
+#custom-hyprsunset.off {
+    color: #6272a4; /* Dim Blue-Gray */
+}

@@ -1,78 +1,72 @@
 #!/bin/bash
-#
-# Hyprsunset Toggle Script
-# ------------------------
-# This script toggles Hyprsunset between a warm color temperature (night mode)
-# and a neutral color temperature (day mode). It also provides a JSON status
-# output suitable for Waybar or similar status bars.
-#
-# Functions:
-# - init_state     : Creates a state file if it doesn't exist.
-# - start_hyprsunset: Restarts hyprsunset with a given color temperature.
-# - toggle         : Switches between warm and neutral modes and updates state.
-# - status         : Prints the current state in JSON format.
-#
-# Usage:
-#   ./hyprsunset.sh -t   # Toggle Hyprsunset ON/OFF
-#   ./hyprsunset.sh -s   # Show current status (Waybar-compatible JSON)
-#
 
-STATE_FILE="$HOME/.cache/hyprsunset_state"
-PID_FILE="$HOME/.cache/hyprsunset.pid"
-
-WARM_TEMP=4500
+# Configuration
+STATE_FILE="$HOME/.config/waybar/scripts/sunset_state"
+DEFAULT_WARM=4500
 NEUTRAL_TEMP=6500
+STEP=500
+MIN_TEMP=2000
+MAX_TEMP=6500
 
-init_state() {
-    [ ! -f "$STATE_FILE" ] && echo "off" > "$STATE_FILE"
+# Icons
+ICON_ON="󰛨"
+ICON_OFF="󰛩"
+
+# Initialize state file if missing
+if [ ! -f "$STATE_FILE" ]; then
+    echo "enabled=0" > "$STATE_FILE"
+    echo "warm_temp=$DEFAULT_WARM" >> "$STATE_FILE"
+fi
+
+# Load current state
+ENABLED=$(grep "enabled=" "$STATE_FILE" | cut -d'=' -f2)
+WARM_TEMP=$(grep "warm_temp=" "$STATE_FILE" | cut -d'=' -f2)
+
+apply_settings() {
+    # Ensure hyprsunset is running in the background
+    if ! pgrep -x "hyprsunset" > /dev/null; then
+        hyprsunset > /dev/null 2>&1 &
+        sleep 0.2
+    fi
+
+    if [ "$ENABLED" -eq 1 ]; then
+        # Use IPC for instant update
+        hyprctl hyprsunset temperature "$WARM_TEMP"
+    else
+        # Set to neutral (effectively off)
+        hyprctl hyprsunset temperature "$NEUTRAL_TEMP"
+    fi
+
+    # Save to file
+    echo "enabled=$ENABLED" > "$STATE_FILE"
+    echo "warm_temp=$WARM_TEMP" >> "$STATE_FILE"
 }
 
-start_hyprsunset() {
-    local temp="$1"
-
-    # If already running, stop it gracefully
-    if [ -f "$PID_FILE" ]; then
-        PID=$(cat "$PID_FILE")
-        if kill -0 "$PID" 2>/dev/null; then
-            kill "$PID" 2>/dev/null
-            wait "$PID" 2>/dev/null
+case $1 in
+    toggle)
+        ENABLED=$((1 - ENABLED))
+        apply_settings
+        ;;
+    inc)
+        WARM_TEMP=$((WARM_TEMP + STEP))
+        [ "$WARM_TEMP" -gt "$MAX_TEMP" ] && WARM_TEMP=$MAX_TEMP
+        ENABLED=1
+        apply_settings
+        ;;
+    dec)
+        WARM_TEMP=$((WARM_TEMP - STEP))
+        [ "$WARM_TEMP" -lt "$MIN_TEMP" ] && WARM_TEMP=$MIN_TEMP
+        ENABLED=1
+        apply_settings
+        ;;
+    init)
+        apply_settings
+        ;;
+    status)
+        if [ "$ENABLED" -eq 1 ]; then
+            echo "{\"text\": \"$ICON_ON\", \"tooltip\": \"Blue Light Filter: ACTIVE\nCurrent Temp: $WARM_TEMP K\" , \"class\": \"on\"}"
+        else
+            echo "{\"text\": \"$ICON_OFF\", \"tooltip\": \"Blue Light Filter: INACTIVE\nSaved Preset: $WARM_TEMP K\", \"class\": \"off\"}"
         fi
-    fi
-
-    # Start new hyprsunset instance
-    hyprsunset -t "$temp" &
-    echo $! > "$PID_FILE"
-}
-
-toggle() {
-    init_state
-    STATE=$(cat "$STATE_FILE")
-
-    if [ "$STATE" = "off" ]; then
-        start_hyprsunset "$WARM_TEMP"
-        echo "on" > "$STATE_FILE"
-    else
-        start_hyprsunset "$NEUTRAL_TEMP"
-        echo "off" > "$STATE_FILE"
-    fi
-}
-
-status() {
-    init_state
-    STATE=$(cat "$STATE_FILE")
-
-    if [ "$STATE" = "on" ]; then
-        echo '{"text":"󰈈","class":"active","tooltip":"Hyprsunset ON (smooth)\nClick to turn OFF"}'
-    else
-        echo '{"text":"","class":"inactive","tooltip":"Hyprsunset OFF (smooth)\nClick to turn ON"}'
-    fi
-}
-
-case "$1" in
-    -s) status ;;
-    -t) toggle ;;
-    *)
-        echo "Usage: $0 -s | -t"
-        exit 1
         ;;
 esac
