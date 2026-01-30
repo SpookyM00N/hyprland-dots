@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-STATE_FILE="$HOME/.config/hypr/sunset_state"
+STATE_FILE="$HOME/.config/waybar/scripts/sunset_state"
 DEFAULT_WARM=4500
 NEUTRAL_TEMP=6500
 STEP=500
@@ -31,17 +31,28 @@ apply_settings() {
         sleep 0.2
     fi
 
+    # Temperature Logic
     if [ "$ENABLED" -eq 1 ]; then
         hyprctl hyprsunset temperature "$WARM_TEMP" > /dev/null
-        # Send/Update notification and capture new ID
-        NEW_ID=$(notify-send -p -r "$LAST_ID" -i "weather-clear-night" "Hyprsunset ON" "Temperature: ${WARM_TEMP}K")
+        TITLE="Hyprsunset ON"
+        MSG="Temperature: ${WARM_TEMP}K"
+        ICON="weather-clear-night"
     else
         hyprctl hyprsunset temperature "$NEUTRAL_TEMP" > /dev/null
-        # Send/Update notification and capture new ID
-        NEW_ID=$(notify-send -p -r "$LAST_ID" -i "weather-clear" "Hyprsunset OFF" "Screen reset to ${NEUTRAL_TEMP}K")
+        TITLE="Hyprsunset OFF"
+        MSG="Screen reset to ${NEUTRAL_TEMP}K"
+        ICON="weather-clear"
     fi
 
-    # Update state file with new values and the new Notification ID
+    # NOTIFICATION LOGIC: 
+    # Use -p to get ID. Use -r with LAST_ID. 
+    # If LAST_ID is old/invalid, notify-send usually just creates a new one.
+    NEW_ID=$(notify-send -p -r "$LAST_ID" -i "$ICON" "$TITLE" "$MSG")
+    
+    # If notify-send fails to return an ID (rare), keep the old one or set to 0
+    [ -z "$NEW_ID" ] && NEW_ID=0
+
+    # Save to file
     echo "enabled=$ENABLED" > "$STATE_FILE"
     echo "warm_temp=$WARM_TEMP" >> "$STATE_FILE"
     echo "last_id=$NEW_ID" >> "$STATE_FILE"
@@ -65,6 +76,8 @@ case $1 in
         apply_settings
         ;;
     init)
+        # On boot, we reset last_id to 0 so the first notification starts fresh
+        sed -i 's/last_id=.*/last_id=0/' "$STATE_FILE"
         if ! pgrep -x "hyprsunset" > /dev/null; then
             hyprsunset > /dev/null 2>&1 &
             sleep 0.2
@@ -79,3 +92,4 @@ case $1 in
         fi
         ;;
 esac
+
