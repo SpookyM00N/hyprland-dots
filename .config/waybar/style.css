@@ -22,15 +22,15 @@ tooltip label {
 }
 
 #idle_inhibitor, #clock, #custom-hyprsunset {
-    padding: 4px 3px;
+    padding: 2px 3px;
 }
 
 #network, #pulseaudio, #custom-brightness, #custom-notification {
-    padding: 4px 3px;
+    padding: 2px 3px;
 }
 
 #tray {
-    padding: 4px 3px;
+    padding: 2px 3px;
 }
 
 /* All following pertains to hyprland/workspaces module styling */
@@ -58,8 +58,8 @@ tooltip label {
     background-color: #aca3c9;
     color: #000000;
     border-radius: 20px;
-    margin: 5px 5px;
-    padding: 0 15px;
+    margin: 5px 3px;
+    padding: 0 13px;
     animation: ws_active 20s ease-in-out 1;
     transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
 }
@@ -78,7 +78,7 @@ tooltip label {
     min-width: 20px;
     color: #aca3c9;
     border-radius: 20px;
-    padding: 4px 5px;
+    padding: 2px 5px;
     margin: 3px 10px 3px 10px;
 }
 
