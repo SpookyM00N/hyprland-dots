@@ -1,0 +1,98 @@
+// CONFIGURATION FOR CLIPBOARD //
+
+configuration {
+		modi:  "dmenu";
+	  show-icons:  false;
+       click-to-exit:  true;
+	   kb-cancel:  "MousePrimary";
+		font:  "JetBrainsMono Nerd Font Propo 10";
+}
+
+@theme "/dev/null"
+
+// Main //
+window {
+	      anchor:  northeast;
+	    location:  northeast;
+	       width:  20em;
+	      height:  25em;
+	    x-offset:  -1.2em;
+	    y-offset:  0.7em;
+	transparency:  "real";
+	  fullscreen:  false;
+	     enabled:  true;
+	      cursor:  "default";
+	     spacing:  0em;
+	     padding:  0em;
+	      border:  0.2em;
+       border-radius:  0.6em;
+	border-color:  #aca3c9;
+}
+mainbox {
+	     enabled:  true;
+	     spacing:  0;
+	     padding:  1em;
+	 orientation:  vertical;
+	    children:  [ "inputbar" , "listbox" ];
+    background-color:  #1E1E2E;
+}	
+inputbar {
+	     enabled:  true;
+	     padding:  0em;
+       border-radius:  1.4em;
+    background-color:  #aca3c9;
+	    children:  [ "entry" ];
+}
+entry {
+	 placeholder:  "Search...";
+   placeholder-color:  #aca3c999;
+	     enabled:  true;
+	      border:  0.2em;
+       border-radius:  1.4em;
+	     padding:  0.6em;
+    background-color:  #2c2542;
+	  text-color:  #aca3c9; 
+}
+
+listbox {
+	     spacing:  0;
+	 orientation:  vertical;
+	    children:  [ "dummy" , "listview" , "dummy" ];
+    background-color:  #1E1E2E;
+}
+listview {
+	     enabled:  true;
+	     padding:  0;
+	       lines:  9;
+	fixed-height:  true;
+       fixed-columns:  true;
+	      expand:  false;
+	      cursor:  "default";
+    background-color:  transparent;
+	  text-color:  #aca3c9;
+}
+dummy {
+	     spacing:  0;
+	     spacing:  0;
+    background-color:  transparent;
+}
+
+// ELEMENT //
+element {
+	    enabled:  true;
+	    padding:  0.5em;
+   background-color:  transparent;
+	 text-color:  #aca3c9;
+}
+element selected.normal {
+     border-radius:  1.4em;
+  background-color:  #aca2c9B3;
+	text-color:  #1E1E2E;
+}
+element-text {
+    vertical-align:  0.0;
+  horizontal-align:  0.0;
+  background-color:  transparent;
+	text-color:  inherit;
+}
+
