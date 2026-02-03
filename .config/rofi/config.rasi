@@ -70,7 +70,7 @@ listview {
 	fixed-height:  true;
        fixed-columns:  true;
 	      cursor:  "default";
-    background-color:  #1E1E2EB3;
+    background-color:  #1E1E2E99;
 	  text-color:  #aca3c9;
 }
 

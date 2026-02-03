@@ -1,6 +1,6 @@
 {
     "layer": "top",
-    "modules-left": ["group/pillleft1","group/pillleft2"],
+    "modules-left": ["group/pillleft1","group/pillleft2","group/pillleft3"],
     "modules-center": ["group/pillcenter"],
     "modules-right": ["group/pillright","group/pillright1","group/pillright2"],
 
@@ -15,8 +15,14 @@
     "group/pillleft2": {
         "orientation": "inherit",
         "modules": [
-	    "wlr/taskbar",
-	    "mpris"
+	    "wlr/taskbar"
+        ]
+    },
+
+    "group/pillleft3": {
+        "orientation": "inherit",
+        "modules": [
+            "mpris"
         ]
     },
 

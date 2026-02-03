@@ -36,4 +36,4 @@ swww img "$FULL_PATH" \
 # -gravity center -extent 1280x720: Crops it perfectly to 720p if the aspect ratio differs
 magick "$FULL_PATH" -thumbnail 1280x720^ -gravity center -extent 1280x720 -blur 0x12 "$BLUR_PATH"
 
-notify-send "Wallpaper Updated" "Cache updated at 720p"
+notify-send "Wallpaper Updated" "Current: $SELECTION"
