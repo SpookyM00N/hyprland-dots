@@ -25,7 +25,7 @@ tooltip label {
     padding: 2px 3px;
 }
 
-#network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
+#mpris, #network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
     padding: 2px 3px;
 }
 

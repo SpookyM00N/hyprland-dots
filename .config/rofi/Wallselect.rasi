@@ -1,0 +1,121 @@
+/*****----- Configuration -----*****/
+configuration {
+    modi:                        "drun";
+    show-icons:                  true;
+    dmenu-display-format:        "{name}";
+    font:                        "JetBrainsMono Nerd Font Propo Bold 10";
+    cycle:			 true;
+}
+
+@theme "/dev/null"
+
+/* Main */
+window {
+    transparency:                "real";
+    fullscreen:                  false;
+    width:                       50em; 
+    height:                      18em;
+    enabled:                     true;
+    border:                      0.1em;
+    border-radius:               0.6em; 
+    border-color:                #aca3c9;
+    cursor:                      "default";
+    background-color:            #1E1E2E99;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled:                     true;
+    spacing:                     1.3em;
+    padding:                     1em;
+    background-color:            transparent;
+    children:                    [ "inputbar", "listview" ];
+}
+
+/*****----- Input Bar -----*****/
+inputbar {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     0.6em;
+    border:                      0.1em;
+    border-radius:               1.4em;
+    border-color:                #aca3c9;
+    background-color:            transparent;
+    text-color:                  #aca3c9;
+    children:                    [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:                     true;
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+
+entry {
+    enabled:                     true;
+    background-color:            inherit;
+    text-color:                  inherit;
+    cursor:                      text;
+    placeholder:                 "Search wallpapers...";
+    placeholder-color:           #aca3c999;
+}
+
+/*****----- Listview (The Grid) -----*****/
+listview {
+    enabled:                     true;
+    columns:                     4; 
+    lines:                       1;
+    dynamic:                     true;
+    scrollbar:                   false;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+    cycle:			 true;    
+    spacing:                     0.9em;
+    background-color:            transparent;
+    text-color:                  #aca3c9;
+    cursor:                      "default";
+}
+
+/*****----- Elements (The Thumbnails) -----*****/
+element {
+    enabled:                     true;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     0.9em;
+    border-radius:               0.6em;
+    border-color:                transparent; 
+    background-color:            #1E1E2EB3;
+    text-color:                  #aca3c9;
+    orientation:                 vertical;
+    cursor:                      pointer;
+}
+/*
+element normal.normal {
+    background-color:            @background-alt;
+    text-color:                  @foreground;
+}
+*/
+/* The Selected State - White Border */
+element selected.normal {
+    background-color:            #aca3c9B3;
+    text-color:                  #1E1E2E;
+}
+
+element-icon {
+    background-color:            transparent;
+    text-color:                  inherit;
+    size:                        9em;
+    cursor:                      inherit;
+}
+
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    highlight:                   inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+}

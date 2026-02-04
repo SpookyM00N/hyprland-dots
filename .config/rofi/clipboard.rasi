@@ -24,7 +24,7 @@ window {
 	      cursor:  "default";
 	     spacing:  0em;
 	     padding:  0em;
-	      border:  0.2em;
+	      border:  0.1em;
        border-radius:  0.6em;
 	border-color:  #aca3c9;
 }
@@ -47,7 +47,7 @@ entry {
 	 placeholder:  "Search...";
    placeholder-color:  #aca3c999;
 	     enabled:  true;
-	      border:  0.2em;
+	      border:  0.1em;
        border-radius:  1.4em;
 	     padding:  0.6em;
     background-color:  #2c2542;
