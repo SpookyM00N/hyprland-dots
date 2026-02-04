@@ -1,0 +1,53 @@
+The following is the list of application or packages I had to install during initial hyprland setup
+
+FONTS:
+
+ttf-jetbrains-mono 2.304-2
+ttf-jetbrains-mono-nerd 3.4.0-1
+ttf-nerd-fonts-symbols-common 3.4.0-1
+ttf-nerd-fonts-symbols-mono 3.4.0-1
+ttf-noto-nerd 3.4.0-1
+noto-fonts-cjk 
+noto-fonts-emoji
+
+APPLICATIONS:
+
+waybar
+fastfetch
+pavucontrol
+brightnessctl
+swaync + libnotify 
+wlogout
+hyprsunset
+hypridle
+hyprlock
+playerctl
+hyprshot + hyprpicker : screenshots
+swww : wallpaper daemon
+imagemagick
+rofi
+wl-clipboard
+cliphist
+
+MANAGEMENT:
+
+git
+base-devel
+stow
+github-cli : gh auth login
+less
+
+SYSTEM:
+
+polkit-gnome
+network-manager-applet
+ddcutil: brightness-controlling
+xdg-desktop-portal-gtk
+xdg-desktop-portal-hyprland
+
+USER SHELL:
+bash
+bash-completion
+starship : prompt
+
+wev for keybindings
