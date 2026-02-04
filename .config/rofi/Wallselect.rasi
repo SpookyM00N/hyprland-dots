@@ -43,13 +43,7 @@ inputbar {
     border-color:                #aca3c9;
     background-color:            transparent;
     text-color:                  #aca3c9;
-    children:                    [ "prompt", "entry" ];
-}
-
-prompt {
-    enabled:                     true;
-    background-color:            inherit;
-    text-color:                  inherit;
+    children:                    [ "entry" ];
 }
 
 entry {

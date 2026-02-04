@@ -1,8 +1,8 @@
 {
 "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
 "logo": {
-    "source": " ",
-    "height": 14
+    "source": "$HOME/.config/fastfetch/logo.txt ",
+    "height": 18
   },
   "display": {
     "separator": " : "
@@ -84,7 +84,7 @@
     },
     {
       "type": "memory",
-      "key": "   Memory ",
+      "key": "  󰾆 Memory ",
       "keyColor": "magenta"
     },
     {

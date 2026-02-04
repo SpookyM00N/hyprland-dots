@@ -86,7 +86,7 @@ case "$1" in
             FILE_LIST+="${file}\0icon\x1f${WALLPAPER_DIR}/${file}\n"
         done < <(find "$WALLPAPER_DIR" -maxdepth 1 -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" \) -printf "%f\n" | sort)
 
-        SELECTION=$(echo -e "$FILE_LIST" | rofi -dmenu -theme "$ROFI_THEME" -i -p "󰸉 Select Wallpaper")
+        SELECTION=$(echo -e "$FILE_LIST" | rofi -dmenu -theme "$ROFI_THEME")
         
         [[ -z "$SELECTION" ]] && exit 0
         apply_wallpaper "$SELECTION"
