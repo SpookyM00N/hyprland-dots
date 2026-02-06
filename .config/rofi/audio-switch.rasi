@@ -1,0 +1,62 @@
+configuration {
+    show-icons:         false;
+    font:               "Inter 11";
+    disable-history:    true;
+}
+
+@theme "/dev/null"
+
+*{
+    background-color: transparent;
+}
+
+window {
+    transparency:       "real";
+    background-color:   #1E1E2E;
+    border:             0.1em;
+    border-color:       #aca3c9;
+    border-radius:      0.6em;
+    width:              21em;
+    location:           northeast;
+    anchor:             northeast;
+    x-offset:  -1.2em;
+    y-offset:  0.7em;
+}
+
+inputbar {
+    children:           [ prompt ];
+    background-color:   #1E1E2E;
+    padding:            12px;
+}
+
+prompt {
+    background-color:   #aca3c9;
+    text-color:         #1E1E2E;
+    padding:            4px 12px;
+    border-radius:      1.4em;
+    margin:             0px 10px 0px 0px;
+}
+
+listview {
+    lines:              6;
+    columns:            1;
+    fixed-height:       false;
+    padding:            5px 10px 10px 10px;
+}
+
+element {
+    padding:            8px;
+    border-radius:      6px;
+    text-color:		#aca3c9;
+}
+
+element selected {
+    background-color:   #aca3c9B3;
+    border-radius:	1.4em;
+    text-color:         #1E1E2E;
+}
+
+element-text {
+    vertical-align:     0.5;
+    text-color:		inherit;
+}

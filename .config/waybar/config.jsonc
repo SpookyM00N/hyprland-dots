@@ -203,6 +203,7 @@
         },
         "scroll-step": 1,
         "on-click": "pavucontrol",
+	"on-click-right": "$HOME/.config/waybar/scripts/audio-switch.sh",
         "ignored-sinks": ["Easy Effects Sink"]
     },
 
@@ -210,8 +211,8 @@
         "format": "󰃟{}",
         "exec": "cat /tmp/monitor_brightness 2>/dev/null || echo 100",
         "interval": 1, 
-        "on-scroll-up": "~/.config/waybar/scripts/brightness.sh +",
-        "on-scroll-down": "~/.config/waybar/scripts/brightness.sh -",
+        "on-scroll-up": "$HOME/.config/waybar/scripts/brightness.sh +",
+        "on-scroll-down": "$HOME/.config/waybar/scripts/brightness.sh -",
         "tooltip": false
     },
 
