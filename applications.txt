@@ -17,7 +17,6 @@ fastfetch
 pavucontrol
 brightnessctl
 swaync + libnotify 
-wlogout
 hyprsunset
 hypridle
 hyprlock
@@ -51,3 +50,10 @@ bash-completion
 starship : prompt
 
 wev for keybindings
+
+
+THEMING:
+wlogout
+qt5ct-kde
+qt6ct-kde
+nwg-look
