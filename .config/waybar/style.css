@@ -14,11 +14,14 @@ window#waybar {
 }
 
 tooltip {
-    background: rgba(30, 30, 46, 0.85);
+    background: rgba(30, 30, 46, 0.8);
     border: 1px solid #aca3c9;
 }
 tooltip label {
   color: white;
+}
+tooltip > box {
+  background-color: initial;
 }
 
 #idle_inhibitor, #clock, #custom-hyprsunset {
