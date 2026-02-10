@@ -59,7 +59,7 @@ tooltip > box {
 
 #workspaces button.active {
     background-color: #aca3c9;
-    color: #000000;
+    color: #1e1e2e;
     border-radius: 20px;
     margin: 5px 3px;
     padding: 0 13px;
