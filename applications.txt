@@ -9,6 +9,8 @@ ttf-nerd-fonts-symbols-mono 3.4.0-1
 ttf-noto-nerd 3.4.0-1
 noto-fonts-cjk 
 noto-fonts-emoji
+ttf-cascadia-code-nerd
+cantarell-fonts
 
 APPLICATIONS:
 

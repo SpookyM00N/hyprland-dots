@@ -20,7 +20,7 @@ window {
     border-radius:               0.6em; 
     border-color:                #aca3c9;
     cursor:                      "default";
-    background-color:            #1E1E2E99;
+    background-color:            #1E1E2EB3;
 }
 
 /*****----- Main Box -----*****/
@@ -81,7 +81,7 @@ element {
     padding:                     0.9em;
     border-radius:               0.6em;
     border-color:                transparent; 
-    background-color:            #1E1E2EB3;
+    background-color:            #1E1E2E99;
     text-color:                  #aca3c9;
     orientation:                 vertical;
     cursor:                      pointer;
