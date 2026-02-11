@@ -34,7 +34,7 @@ apply_wallpaper() {
     ### 2. Generate System Colors (Wallust)
     ### Run wallust to update terminal and system colors
     ###if command -v wallust &> /dev/null; then
-    ###    wallust run "$full_path"
+    ###       wallust run "$full_path"
     ###fi
 
     # 3. Create blurred copy for Waybar/Lockscreen (720p)

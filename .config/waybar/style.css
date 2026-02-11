@@ -114,7 +114,7 @@ tooltip > box {
 }
 
 #taskbar button:hover {
-    background: #2c2542;
+    background: #aca3c9;
     color: #aca3c9;
     border-radius: 20px;
     animation: tb_hover 20s ease-in-out 1;

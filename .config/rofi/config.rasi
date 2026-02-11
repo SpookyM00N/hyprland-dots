@@ -87,7 +87,7 @@ button {
 	     padding:  2.5em;
 	     spacing:  0em;
        border-radius:  3em;
-    background-color:  #1E1E2E;
+    background-color:  #2c2542;
 	  text-color:  #aca3c9;
 }
 button selected {
