@@ -78,7 +78,7 @@
 	{
           "label": "",
           "type": "button",
-          "command": "swaync-client --close-panel && sleep 0.7 && color=$(hyprpicker -a -f hex) && notify-send -a 'Hyprpicker' '🎨 Color copied!' $color"
+          "command": "swaync-client --close-panel && sleep 0.7 && color=$(hyprpicker -a -f hex) && [ -n \"$color\" ] && notify-send -a 'Hyprpicker' '🎨 Color copied!' \"$color\""
         },
         {
           "label": "󰂯",
