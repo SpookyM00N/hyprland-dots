@@ -107,9 +107,9 @@
       	"vlc": "\uf8e0"
     },
         "status-icons": {
-      	"paused": "\uf04c",
-      	"playing": "\uf04b",
-      	"stopped": "\uf04d"
+      	"paused": "\uf04b",
+      	"playing": "\uf04c",
+      	"stopped": " "
     	},
     	"max-length": 20,
     	"on-click": "playerctl play-pause",

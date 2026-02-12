@@ -41,7 +41,6 @@
     }
   },
   "widgets": [
-    "label",
     "buttons-grid",
     "mpris",
     "volume",
@@ -57,10 +56,6 @@
     },
     "dnd": {
       "text": "Do not disturb"
-    },
-    "label": {
-      "max-lines": 1,
-      "text": " "
     },
     "mpris": {
       "image-size": 96,
@@ -80,13 +75,10 @@
           "label": "",
           "command": "pavucontrol"
         },
-        {
-          "label": "",
-          "command": "pavucontrol -t 4"
-        },
-        {
-          "label": "",
-          "command": "nm-connection-editor"
+	{
+          "label": "",
+          "type": "button",
+          "command": "swaync-client --close-panel && sleep 0.7 && color=$(hyprpicker -a -f hex) && notify-send -a 'Hyprpicker' '🎨 Color copied!' $color"
         },
         {
           "label": "󰂯",

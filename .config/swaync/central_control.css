@@ -7,6 +7,7 @@
 * {
   color:            @text;
 
+  min-height: 0;
   all: unset;
   font-size: 14px;
   font-family: "JetBrains Mono Nerd Font 10";
@@ -198,31 +199,23 @@ slider {
 }
 
   /* Buttons menu */
-.widget-buttons-grid {
-  font-size: x-large;
-  padding: 6px 2px;
-  margin: 6px;
-  border-radius: 12px;
-  background: alpha(@background-alt, 0.7);
+.widget-buttons-grid > flowbox {
+    padding: 6px;
+    margin: 5px;
+    background: transparent;
 }
 
-.widget-buttons-grid>flowbox>flowboxchild>button {
-  margin: 4px 10px;
-  padding: 6px 12px;
-  background: transparent;
-  border-radius: 8px;
+.widget-buttons-grid > flowbox > flowboxchild {
+    min-width: 45%;
+    padding: 3px;
 }
 
-.widget-buttons-grid>flowbox>flowboxchild>button:hover {
-  background: @hover;
-}
-
-  /* Music player */
-.widget-mpris {
+.widget-buttons-grid > flowbox > flowboxchild > button {
     background: alpha(@background-alt, 0.7);
-    border-radius: 16px;
-    color: @text;
-    margin:  20px 6px;
+    color: @selected;
+    border-radius: 25px;
+    padding: 12px 48px;
+    margin: 3px;
 }
 
   /* NOTE: Background need *opacity 1* otherwise will turn into the album art blurred  */
@@ -230,7 +223,7 @@ slider {
 .widget-mpris-player {
     background-color: @background-sec;
     border-radius: 22px;
-    padding: 6px 14px;
+    padding: 6px;
     margin: 6px;
 }
 
