@@ -250,13 +250,7 @@
             "tooltip": true,
 	    "tooltup-format":"Logout menu",
 	    "on-click": "wlogout -c 10px -r 10px",
-            "menu": "on-click-right",
-            "menu-file": "~/.config/waybar/power_menu.xml",
-            "menu-actions": {
-                "shutdown": "shutdown now",
-                "reboot": "reboot",
-                "suspend": "systemctl suspend",
-                "hibernate": "systemctl hibernate",
+            "on-click-right": "wlogout -b2 -l ~/.config/wlogout/layout_2 -C ~/.config/wlogout/style_2.css"
             },
     },    
 }

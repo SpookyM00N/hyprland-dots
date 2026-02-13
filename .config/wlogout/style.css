@@ -18,13 +18,13 @@ button {
 }
 
 button:focus, button:active {
-        background-color: #aca3c9;
+        background-color: alpha(#aca3c9,0.4);
 	background-size: 30%;
         outline-style: none;
 }
 
  button:hover {
-        background-color: #aca3c9; 
+        background-color: alpha(#aca3c9,0.4); 
         background-size: 30%;
         outline-style: none;
 	animation: gradient_f 20s ease-in infinite;
