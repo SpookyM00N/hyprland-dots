@@ -8,7 +8,7 @@ window {
 }
 
 grid {
-    margin: 100px 400px; 
+    margin: 50px 400px; 
     background-color: transparent;
 }
 
@@ -20,23 +20,21 @@ button {
     border-width: 0px;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 10%;
+    background-size: 20%;
     border-radius: 0px;
     box-shadow: none;
     text-shadow: none;
-    min-height: 100px;
-    min-width: 100px;
     animation: gradient_f 20s ease-in infinite;
 }
 
 button:focus {
     background-color: alpha(#aca3c9, 0.4);
-    background-size: 20%;
+    background-size: 25%;
 }
 
 button:hover {
     background-color: alpha(#aca3c9, 0.4);
-    background-size: 25%;
+    background-size: 30%;
     border-radius: 20px;
     animation: gradient_f 20s ease-in infinite;
     transition: all 0.3s cubic-bezier(.55,0.0,.28,1.682);
