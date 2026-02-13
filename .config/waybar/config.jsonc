@@ -249,8 +249,8 @@
         "format" : " <span></span> ",
             "tooltip": true,
 	    "tooltup-format":"Logout menu",
-	    "on-click": "wlogout -c 10px -r 10px",
-            "on-click-right": "wlogout -b2 -l ~/.config/wlogout/layout_2 -C ~/.config/wlogout/style_2.css"
+	    "on-click": "wlogout -b2 -l ~/.config/wlogout/layout_2 -C ~/.config/wlogout/style_2.css",
+            "on-click-right": "wlogout -c 10px -r 10px"
             },
     },    
 }
