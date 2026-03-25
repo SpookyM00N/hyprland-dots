@@ -1,3 +1,5 @@
+@import "colors.css";
+
 *{
     border: none;
     border-radius: 0;
@@ -7,15 +9,15 @@
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0);
+    background-color: alpha(@surface,.8);
     min-height: 25px;
     color: white;
     padding: 10px 0;
 }
 
 tooltip {
-    background: rgba(30, 30, 46, 0.8);
-    border: 1px solid #aca3c9;
+    background: alpha(@on_primary,0.8); /* rgba(30, 30, 46, 0.85); */
+    border: 1px solid @primary; /* #aca3c9 */
 }
 tooltip label {
   color: white;
@@ -38,9 +40,9 @@ tooltip > box {
 
 /* All following pertains to hyprland/workspaces module styling */
 #pillleft1 {
-    background-color: rgba(30, 30, 46, 0.85);
-    border-radius: 20px;
-    color: #aca3c9;
+    background-color: alpha(@secondary_container, .5); /* rgba(30, 30, 46, 0.85); */
+    border-radius: 5px;
+    color: @primary; /* #aca3c9 */
     padding: 0 10px;
     margin: 3px 10px 3px 10px;
 }
@@ -53,14 +55,14 @@ tooltip > box {
     margin-bottom: 5px; 
     padding-left: 5px;
     padding-right: 5px;
-    color: #aca3c9;
+    color: @on_secondary_container; /* #aca3c9 */
     animation: ws_normal 20s ease-in-out 1;
 }
 
 #workspaces button.active {
-    background-color: #aca3c9;
-    color: #1e1e2e;
-    border-radius: 20px;
+    background-color: @primary; /* #aca3c9 */
+    color: @on_primary; /* rgba(30, 30, 46, 0.85) */
+    border-radius: 5px;
     margin: 5px 3px;
     padding: 0 13px;
     animation: ws_active 20s ease-in-out 1;
@@ -68,19 +70,19 @@ tooltip > box {
 }
 
 #workspaces button:hover {
-    background: #2c2542;
+    background: @on_secondary; /* #2c2542 */
     color: #FFFFFF;
-    border-radius: 20px;
+    border-radius: 5px;
     animation: ws_hover 20s ease-in-out 1;
     transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
 
 #pillleft2, #pillleft3, #pillcenter, #pillright, #pillright1, #pillright2 {
-    background-color: rgba(30, 30, 46, 0.85);
+    background-color: alpha(@secondary_container, .35); /* rgba(30, 30, 46, 0.85) */
     min-width: 20px;
-    color: #aca3c9;
-    border-radius: 20px;
+    color: @on_secondary_container; /* #aca3c9 */
+    border-radius: 5px;
     padding: 2px 5px;
     margin: 3px 10px 3px 10px;
 }
@@ -102,9 +104,9 @@ tooltip > box {
 }
 
 #taskbar button.active {
-    background: #aca3c9;
-    color: rgba(30, 30, 46, 0.85);
-    border-radius: 20px;
+    background: @primary; /* #aca3c9 */
+    color: @on_primary; /* rgba(30, 30, 46, 0.85) */
+    border-radius: 5px;
     margin-left: 5px;
     padding-left: 5px;
     padding-right: 5px;
@@ -114,16 +116,16 @@ tooltip > box {
 }
 
 #taskbar button:hover {
-    background: #aca3c9;
+    background: @on_secondary; /* #aca3c9 */
     color: #aca3c9;
-    border-radius: 20px;
+    border-radius: 5px;
     animation: tb_hover 20s ease-in-out 1;
     transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
 #custom-power:hover {
-    background: #2c2542;
-    border-radius: 20px;
+    background: @on_secondary; /* #2c2542 */
+    border-radius: 5px;
 }
 
 #custom-hyprsunset.on {

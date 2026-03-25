@@ -31,11 +31,8 @@ apply_wallpaper() {
         --transition-step "$STEP" \
         --transition-type "$TYPE"
 
-    ### 2. Generate System Colors (Wallust)
-    ### Run wallust to update terminal and system colors
-    ###if command -v wallust &> /dev/null; then
-    ###       wallust run "$full_path"
-    ###fi
+    # 2. Wallpaper based color schemes with matugen
+    matugen image "$full_path" -m dark --prefer "saturation" -t "scheme-vibrant" -r "triangle" 
 
     # 3. Create blurred copy for Waybar/Lockscreen (720p)
     magick "$full_path" -thumbnail 1280x720^ -gravity center -extent 1280x720 -blur 0x12 -strip "$BLUR_PATH"

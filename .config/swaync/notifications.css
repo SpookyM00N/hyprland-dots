@@ -1,3 +1,5 @@
+@import "colors.css";
+
 @define-color text            #cdd6f4;
 @define-color background-alt  #2c2542;
 @define-color selected        #aca3c9;
