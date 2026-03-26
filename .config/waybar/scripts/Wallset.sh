@@ -10,7 +10,7 @@ ROFI_THEME="$HOME/.config/rofi/Wallselect.rasi"
 # Transition Settings
 FPS=75
 STEP=120  # Visible animation speed
-TYPES=("center" "wipe" "wave" "grow" "outer")
+TYPES=("center" "grow" "outer")
 TYPE=${TYPES[$RANDOM % ${#TYPES[@]}]}
 
 # --- Functions ---
@@ -25,8 +25,8 @@ apply_wallpaper() {
         exit 1
     fi
 
-    # 1. Set wallpaper with swww
-    swww img "$full_path" \
+    # 1. Set wallpaper with awww
+    awww img "$full_path" \
         --transition-fps "$FPS" \
         --transition-step "$STEP" \
         --transition-type "$TYPE"

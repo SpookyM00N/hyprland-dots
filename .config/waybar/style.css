@@ -9,7 +9,7 @@
 }
 
 window#waybar {
-    background-color: alpha(@surface,.8);
+    background-color: alpha(@surface,.75);
     min-height: 25px;
     color: white;
     padding: 10px 0;
@@ -26,7 +26,7 @@ tooltip > box {
   background-color: initial;
 }
 
-#idle_inhibitor, #clock, #custom-hyprsunset {
+#clock, #custom-hyprsunset {
     padding: 2px 3px;
 }
 
@@ -40,7 +40,7 @@ tooltip > box {
 
 /* All following pertains to hyprland/workspaces module styling */
 #pillleft1 {
-    background-color: alpha(@secondary_container, .5); /* rgba(30, 30, 46, 0.85); */
+    background-color: alpha(@secondary_container, .45); /* rgba(30, 30, 46, 0.85); */
     border-radius: 5px;
     color: @primary; /* #aca3c9 */
     padding: 0 10px;
@@ -79,7 +79,7 @@ tooltip > box {
 
 
 #pillleft2, #pillleft3, #pillcenter, #pillright, #pillright1, #pillright2 {
-    background-color: alpha(@secondary_container, .35); /* rgba(30, 30, 46, 0.85) */
+    background-color: alpha(@secondary_container, .45); /* rgba(30, 30, 46, 0.85) */
     min-width: 20px;
     color: @on_secondary_container; /* #aca3c9 */
     border-radius: 5px;

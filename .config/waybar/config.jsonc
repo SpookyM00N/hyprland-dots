@@ -1,6 +1,6 @@
 {
     "layer": "top",
-    "modules-left": ["group/pillleft1","group/pillleft2","group/pillleft3"],
+    "modules-left": ["group/pillleft1","group/pillleft2"],
     "modules-center": ["group/pillcenter"],
     "modules-right": ["group/pillright","group/pillright1","group/pillright2"],
 
@@ -19,19 +19,20 @@
         ]
     },
 
+/*
     "group/pillleft3": {
         "orientation": "inherit",
         "modules": [
             "mpris"
         ]
     },
+*/
 
     "group/pillcenter": {
         "orientation": "inherit",
         "modules": [
-            "idle_inhibitor",
-            "clock",
-	    "custom/hyprsunset"
+            "custom/hyprsunset",
+            "clock"
         ]
     },    
 
@@ -120,18 +121,6 @@
     	"tooltip-format": "{title}\nby: {artist}\n{position} / {length}\nPlayer: {player}\n\n󰐎 Click to play/pause\n󰺤 Scroll to seek\n󰙤 Middle click previous\n󰙢 Right click next",  
     	"tooltip-format-stopped": "Player: {player}\n\n󰐎 Click to play/pause\n󰺤 Scroll to seek\n󰙤 Middle click previous\n󰙢 Right click next"
   },
-
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "rotate": 0,
-        "format-icons": {
-            "activated": "\udb80\udd76",
-            "deactivated": "\udb81\udeca"
-        },
-        "tooltip": "true",
-        "tooltip-format-activated": "<span foreground='#98c379'>\udb80\udd76 Caffeine Mode Active</span>\nPrevents system from going to sleep",
-        "tooltip-format-deactivated": "<span foreground='#e06c75'>\udb81\udeca Caffeine Mode Inactive</span>\nSystem will follow normal power settings"
-    },
 
     "clock": {
         "format": "{:%I:%M %p}",
