@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=satty -f
+MimeType=image/jpeg;
+Name=satty -f
+NoDisplay=true
+Type=Application
