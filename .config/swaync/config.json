@@ -90,6 +90,10 @@
                 {
                     "label": "",
                     "command": "hyprctl dispatch exec nwg-look ; swaync-client -cp"
+                },
+                {
+                    "label": "",
+                    "command": "swaync-client -cp ; sleep 1 ; hyprshot -zm region"
                 }
             ]
         }

@@ -11,6 +11,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 ttf-cascadia-code-nerd
 cantarell-fonts
+ttf-ms-fonts
 
 APPLICATIONS:
 
@@ -29,6 +30,7 @@ imagemagick
 rofi
 wl-clipboard
 cliphist
+matugen
 
 MANAGEMENT:
 
@@ -60,3 +62,4 @@ qt5ct-kde
 qt6ct-kde
 nwg-look
 bibata-cursor-theme: cursor
+breeze
