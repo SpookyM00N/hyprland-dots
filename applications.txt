@@ -62,4 +62,4 @@ qt5ct-kde
 qt6ct-kde
 nwg-look
 bibata-cursor-theme: cursor
-breeze
+darkly
