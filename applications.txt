@@ -64,3 +64,4 @@ qt6ct-kde
 nwg-look
 bibata-cursor-theme: cursor
 darkly
+python-pywalfox
