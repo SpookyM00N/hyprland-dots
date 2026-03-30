@@ -46,9 +46,9 @@
         },
         "volume": {
             "device": "default",
-            "label": "",
-	    "expand-button-label": " ",
-      	    "collapse-button-label": " ",
+            "label": "󰕾",
+	    "expand-button-label": "  ",
+      	    "collapse-button-label": "  ",
       	    "show-per-app": true,
             "show-per-app-icon": true,
             "slider": true
@@ -92,7 +92,7 @@
                     "command": "hyprctl dispatch exec nwg-look ; swaync-client -cp"
                 },
                 {
-                    "label": "",
+                    "label": "",
                     "command": "swaync-client -cp ; sleep 1 ; hyprshot -zm region"
                 }
             ]
