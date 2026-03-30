@@ -47,6 +47,7 @@ network-manager-applet
 ddcutil: brightness-controlling
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
+archlinux-xdg-menu
 
 USER SHELL:
 bash
