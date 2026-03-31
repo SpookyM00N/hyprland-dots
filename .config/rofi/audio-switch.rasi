@@ -4,7 +4,7 @@ configuration {
     disable-history:    true;
 }
 
-@theme "/dev/null"
+@theme "~/.config/rofi/colors.rasi"
 
 *{
     background-color: transparent;
@@ -12,9 +12,9 @@ configuration {
 
 window {
     transparency:       "real";
-    background-color:   #1E1E2E;
+    background-color:   @background; /* #1E1E2E; */
     border:             0.1em;
-    border-color:       #aca3c9;
+    border-color:       @secondary-container; /* #aca3c9; */
     border-radius:      0.6em;
     width:              21em;
     location:           northeast;
@@ -25,15 +25,15 @@ window {
 
 inputbar {
     children:           [ prompt ];
-    background-color:   #1E1E2E;
+    background-color:   @background; /* #1E1E2E; */
     padding:            12px;
 }
 
 prompt {
-    background-color:   #aca3c9;
-    text-color:         #1E1E2E;
+    background-color:   @primary; /* #aca3c9; */
+    text-color:         @background; /* #1E1E2E; */
     padding:            4px 12px;
-    border-radius:      1.4em;
+    border-radius:      0.6em;
     margin:             0px 10px 0px 0px;
 }
 
@@ -47,13 +47,13 @@ listview {
 element {
     padding:            8px;
     border-radius:      6px;
-    text-color:		#aca3c9;
+    text-color:		@on-secondary-container; /* #aca3c9; */
 }
 
 element selected {
-    background-color:   #aca3c9B3;
-    border-radius:	1.4em;
-    text-color:         #1E1E2E;
+    background-color:   @selection; /* #aca3c9B3; */
+    border-radius:	0.6em;
+    text-color:         @background; /* #1E1E2E; */
 }
 
 element-text {

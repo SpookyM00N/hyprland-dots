@@ -32,7 +32,7 @@ apply_wallpaper() {
         --transition-type "$TYPE"
 
     # 2. Wallpaper based color schemes with matugen
-    matugen image $full_path --source-color-index 0 -m dark -t "scheme-content" #-m dark --prefer "saturation" -t "scheme-vibrant" -r "triangle"
+    matugen image $full_path --source-color-index 0 -m dark -t "scheme-vibrant" #-m dark --prefer "saturation" -t "scheme-vibrant" -r "triangle"
 
     # 3. Create blurred copy for Waybar/Lockscreen (720p)
     magick "$full_path" -thumbnail 1280x720^ -gravity center -extent 1280x720 -blur 0x12 -strip "$BLUR_PATH"

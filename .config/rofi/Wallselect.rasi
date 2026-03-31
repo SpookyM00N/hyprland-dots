@@ -7,7 +7,7 @@ configuration {
     cycle:			 true;
 }
 
-@theme "/dev/null"
+@theme "~/.config/rofi/colors.rasi"
 
 /* Main */
 window {
@@ -18,9 +18,9 @@ window {
     enabled:                     true;
     border:                      0.1em;
     border-radius:               0.6em; 
-    border-color:                #aca3c9;
+    border-color:                @secondary-container; /* #aca3c9; */
     cursor:                      "default";
-    background-color:            #1E1E2EB3;
+    background-color:            @background-alt; /* #1E1E2EB3; */
 }
 
 /*****----- Main Box -----*****/
@@ -39,10 +39,10 @@ inputbar {
     margin:                      0px;
     padding:                     0.6em;
     border:                      0.1em;
-    border-radius:               1.4em;
-    border-color:                #aca3c9;
+    border-radius:               0.6em;
+    border-color:                @primary; /* #aca3c9; */
     background-color:            transparent;
-    text-color:                  #aca3c9;
+    text-color:                  @primary; /* #aca3c9; */
     children:                    [ "entry" ];
 }
 
@@ -52,7 +52,7 @@ entry {
     text-color:                  inherit;
     cursor:                      text;
     placeholder:                 "Search wallpapers...";
-    placeholder-color:           #aca3c999;
+    placeholder-color:           @primary-alt; /* #aca3c999; */
 }
 
 /*****----- Listview (The Grid) -----*****/
@@ -69,7 +69,7 @@ listview {
     cycle:			 true;    
     spacing:                     0.9em;
     background-color:            transparent;
-    text-color:                  #aca3c9;
+    text-color:                  @on-secondary-container; /* #aca3c9; */
     cursor:                      "default";
 }
 
@@ -81,8 +81,8 @@ element {
     padding:                     0.9em;
     border-radius:               0.6em;
     border-color:                transparent; 
-    background-color:            #1E1E2E99;
-    text-color:                  #aca3c9;
+    background-color:            @background-alt; /* #1E1E2E99; */
+    text-color:                  @on-secondary-container; /* #aca3c9; */
     orientation:                 vertical;
     cursor:                      pointer;
 }
@@ -94,8 +94,8 @@ element normal.normal {
 */
 /* The Selected State - White Border */
 element selected.normal {
-    background-color:            #aca3c9B3;
-    text-color:                  #1E1E2E;
+    background-color:            @selection; /* #aca3c9B3; */
+    text-color:                  @background; /* #1E1E2E; */
 }
 
 element-icon {
