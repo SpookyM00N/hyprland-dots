@@ -53,3 +53,6 @@ PROMPT_COMMAND="history -a"
 #Prompt
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
 eval "$(starship init bash)"
+
+#Scripts directory
+export PATH="$PATH:$HOME/.local/bin"

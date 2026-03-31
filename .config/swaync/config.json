@@ -69,8 +69,8 @@
                 {
                     "label": " Inhibitor",
                     "type": "toggle",
-                    "command": "bash -c $HOME/.config/waybar/scripts/inhibit.sh",
-                    "update-command": "sh -c $HOME/.config/waybar/scripts/update_inhibit.sh"
+                    "command": "bash -c inhibit.sh",
+                    "update-command": "bash -c update_inhibit.sh"
                 },
 		{
 		    "label": "󰕾",
