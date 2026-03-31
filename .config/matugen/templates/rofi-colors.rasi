@@ -1,4 +1,6 @@
 * {
+    main-background: {{colors.background.default.hex}};
+    alpha-background: {{colors.background.default.hex}}99;
     background: {{colors.background.default.hex | lighten: 6.0}};
     primary: {{colors.primary.default.hex}};
     primary-fixed: {{colors.primary_fixed.default.hex}};

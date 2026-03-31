@@ -12,7 +12,7 @@ configuration {
 	   kb-cancel: "MousePrimary";
 }
 
-@theme "/dev/null"
+@theme "~/.config/rofi/colors.rasi"
 
 //Main//
 window {
@@ -26,8 +26,8 @@ window {
 	     padding:  0;
 	      border:  0.2em;
        border-radius:  0.6em;
-	border-color:  #aca3c9;
-    background-color:  #1E1E2E;
+	border-color:  @secondary-container; /* #aca3c9; */
+    background-color:  @main-background; /* #1E1E2E; */
 }
 mainbox {
 	     enabled:  true;
@@ -70,8 +70,8 @@ listview {
 	fixed-height:  true;
        fixed-columns:  true;
 	      cursor:  "default";
-    background-color:  #1E1E2E99;
-	  text-color:  #aca3c9;
+    background-color:  @alpha-background; /* #1E1E2E99; */
+	  text-color:  @on-secondary-container; /* #aca3c9; */
 }
 
 // Modes //
@@ -87,12 +87,12 @@ button {
 	     padding:  2.5em;
 	     spacing:  0em;
        border-radius:  3em;
-    background-color:  #2c2542;
-	  text-color:  #aca3c9;
+    background-color:  @secondary-container; /* #2c2542; */
+	  text-color:  @on-secondary-container;  /* #aca3c9; */
 }
 button selected {
-    background-color:  #aca3c9;
-	  text-color:  #1E1E2E;
+    background-color:  @primary; /* #aca3c9; */
+	  text-color:  @background; /* #1E1E2E; */
 }
 
 // Elements //
@@ -103,11 +103,11 @@ element {
 	     cursor:  "default";
 	    padding:  0.5em;	   
    background-color:  transparent;
-         text-color:  #aca3c9;
+         text-color:  @on-secondary-container; /* #aca3c9; */
 }
 element selected.normal {
-   background-color:  #aca3c9B3;
-	 text-color:  #1E1E2E;
+   background-color:  @selection; /* #aca3c9B3; */
+	 text-color:  @background; /* #1E1E2E; */
       border-radius:  0.6em;
 } 
 element-icon {
@@ -127,8 +127,8 @@ element-text {
 
 // Errors //
 error-message {
-	 text-color:  #aca3c9;
-   background-color:  #1E1E2E;
+	 text-color:  @on-error;
+   background-color:  @error;
      text-transform:  capitalize;
 	   children:  [ "textbox" ];
 }
