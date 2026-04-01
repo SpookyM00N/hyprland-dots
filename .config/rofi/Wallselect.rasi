@@ -41,14 +41,14 @@ inputbar {
     border:                      0.1em;
     border-radius:               0.6em;
     border-color:                @primary; /* #aca3c9; */
-    background-color:            transparent;
+    background-color:            @background-alt;
     text-color:                  @primary; /* #aca3c9; */
     children:                    [ "entry" ];
 }
 
 entry {
     enabled:                     true;
-    background-color:            inherit;
+    background-color:            transparent;
     text-color:                  inherit;
     cursor:                      text;
     placeholder:                 "Search wallpapers...";
@@ -61,13 +61,11 @@ listview {
     columns:                     4; 
     lines:                       1;
     dynamic:                     true;
-    scrollbar:                   false;
     layout:                      vertical;
-    reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
     cycle:			 true;    
-    spacing:                     0.9em;
+    spacing:                     0.6em;
     background-color:            transparent;
     text-color:                  @on-secondary-container; /* #aca3c9; */
     cursor:                      "default";
@@ -86,12 +84,7 @@ element {
     orientation:                 vertical;
     cursor:                      pointer;
 }
-/*
-element normal.normal {
-    background-color:            @background-alt;
-    text-color:                  @foreground;
-}
-*/
+
 /* The Selected State - White Border */
 element selected.normal {
     background-color:            @selection; /* #aca3c9B3; */

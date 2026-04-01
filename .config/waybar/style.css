@@ -19,23 +19,26 @@ tooltip {
     background: alpha(@on_primary,0.8); /* rgba(30, 30, 46, 0.85); */
     border: 1px solid @primary; /* #aca3c9 */
 }
+
 tooltip label {
   color: white;
 }
+
 tooltip > box {
   background-color: initial;
 }
 
-#clock, #custom-hyprsunset {
+#custom-hyprsunset, #clock, #tray, #network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
     padding: 2px 3px;
 }
 
-#mpris, #network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
-    padding: 2px 3px;
+#custom-hyprsunset.on {
+    color: #ffb86c; /* Warm Orange/Yellow */
+    border-radius: 10px;
 }
 
-#tray {
-    padding: 2px 3px;
+#custom-hyprsunset.off {
+    color: #6272a4; /* Dim Blue-Gray */
 }
 
 /* All following pertains to hyprland/workspaces module styling */
@@ -78,7 +81,7 @@ tooltip > box {
 }
 
 
-#pillleft2, #pillleft3, #pillcenter, #pillright, #pillright1, #pillright2 {
+#pillleft2, #pillcenter, #pillright, #pillright1, #pillright2 {
     background-color: alpha(@secondary_container, .45); /* rgba(30, 30, 46, 0.85) */
     min-width: 20px;
     color: @on_secondary_container; /* #aca3c9 */
@@ -126,13 +129,4 @@ tooltip > box {
 #custom-power:hover {
     background: @on_secondary; /* #2c2542 */
     border-radius: 5px;
-}
-
-#custom-hyprsunset.on {
-    color: #ffb86c; /* Warm Orange/Yellow */
-    border-radius: 10px;
-}
-
-#custom-hyprsunset.off {
-    color: #6272a4; /* Dim Blue-Gray */
 }
