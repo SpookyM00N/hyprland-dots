@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-STATE_FILE="$HOME/.config/waybar/scripts/sunset_state"
+STATE_FILE="$HOME/.local/bin/sunset_state"
 DEFAULT_WARM=4500
 NEUTRAL_TEMP=6500
 STEP=500
