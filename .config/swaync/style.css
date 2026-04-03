@@ -115,7 +115,7 @@
 
 .control-center {
   background: @center-bg;
-  border-radius: 8px;
+  border-radius: 0.6em;
   border: 1px solid @background-alt;
   min-height: 750px;
   margin: 7px;

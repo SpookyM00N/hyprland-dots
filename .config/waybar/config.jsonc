@@ -1,5 +1,8 @@
 {
     "layer": "top",
+    "margin-top": 4,
+    "margin-left": 8,
+    "margin-right": 8,
     "modules-left": ["group/pillleft1","group/pillleft2"],
     "modules-center": ["group/pillcenter"],
     "modules-right": ["group/pillright","group/pillright1","group/pillright2"],
