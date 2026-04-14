@@ -1,6 +1,6 @@
 {
     "layer": "top",
-    "margin-top": 4,
+    "margin-top": 8,
     "margin-left": 10,
     "margin-right": 10,
     "modules-left": ["group/pillleft1","group/pillleft2"],
