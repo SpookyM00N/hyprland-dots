@@ -78,7 +78,7 @@
         "on-click": "activate",
         "on-click-right": "fullscreen",
         "on-click-middle": "close",
-	"icon-size": 18,
+	"icon-size": 16,
         "class": "no-margin-padding",
         "ignore-list": [
             ""
