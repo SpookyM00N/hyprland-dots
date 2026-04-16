@@ -29,8 +29,12 @@ tooltip > box {
   background-color: initial;
 }
 
-#custom-hyprsunset, #clock, #tray, #network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
+#custom-hyprsunset, #clock {
     padding: 2px 3px;
+}
+
+#tray, #network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
+    padding: 2px 6px;
 }
 
 #custom-hyprsunset.on {
@@ -40,6 +44,10 @@ tooltip > box {
 
 #custom-hyprsunset.off {
     color: #6272a4; /* Dim Blue-Gray */
+}
+
+#custom-power {
+    color: #f38ba8; /* catppuucin maroon */
 }
 
 /* All following pertains to hyprland/workspaces module styling */
