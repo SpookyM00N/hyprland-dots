@@ -91,7 +91,7 @@ install_hyprland_dependencies() {
         cliphist matugen git base-devel github-cli less polkit-gnome 
         network-manager-applet ddcutil xdg-desktop-portal-gtk 
         xdg-desktop-portal-hyprland archlinux-xdg-menu bash bash-completion 
-        starship wlogout qt6ct-kde nwg-look bibata-cursor-theme darkly 
+        starship wlogout qt6ct-kde nwg-look bibata-cursor-theme darkly-qt6-git 
         adw-gtk-theme python-pywalfox
     )
 
