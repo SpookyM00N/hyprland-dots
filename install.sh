@@ -13,7 +13,6 @@ readonly BOLD='\033[1m'
 readonly NC='\033[0m' # No Color
 
 # --- Get the absolute path of the repository ---
-# This ensures we know exactly where the user cloned the script
 readonly REPO_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 # --- Functions ---
@@ -21,18 +20,17 @@ readonly REPO_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 print_header() {
     clear
     echo -e "${YELLOW}"
-    echo "  _   _                      _                 _ "
-    echo " | | | |_   _ _ __  _ __ ___| | __ _ _ __   __| |"
-    echo " | |_| | | | | '_ \| '__/ _ \ |/ _\` | '_ \ / _\` |"
-    echo " |  _  | |_| | |_) | | |  __/ | (_| | | | | (_| |"
-    echo " |_| |_|\__, | .__/|_|  \___|_|\__,_|_| |_|\__,_|"
+    echo "  _   _                 _                 _ "
+    echo " | | | |_   _ _ __  _ _| | __ _ _ __   __| |"
+    echo " | |_| | | | | '_ \| '_| |/ _\`| '_ \ / _\`|"
+    echo " |  _  | |_| | |_) | | | | (_| | | | | (_| |"
+    echo " |_| |_|\__, | .__/|_| |_|\__,_|_| |_|\__,_|"
     echo "        |___/|_|                                 "
     echo -e "          Dotfiles Installation Script${NC}"
     echo "-------------------------------------------------------"
 }
 
 check_root() {
-    # Building packages from the AUR cannot be done as root.
     if [[ "$EUID" -eq 0 ]]; then
         echo -e "${RED}[ERROR] Do not run this script as root or with sudo.${NC}"
         echo -e "The script will prompt for your password when needed."
@@ -42,10 +40,11 @@ check_root() {
 
 check_os() {
     echo -e "Checking system compatibility..."
-    if grep -q 'ID=arch' /etc/os-release 2>/dev/null; then
-        echo -e "${GREEN}[OK] Arch Linux detected.${NC}"
+    # Robust check for any Arch-based distribution
+    if command -v pacman &> /dev/null; then
+        echo -e "${GREEN}[OK] Pacman-based system detected.${NC}"
     else
-        echo -e "${RED}[ERROR] This script currently only supports Arch Linux.${NC}"
+        echo -e "${RED}[ERROR] Pacman not found. This script only supports Arch-based distributions.${NC}"
         exit 1
     fi
     echo "-------------------------------------------------------"
@@ -53,12 +52,9 @@ check_os() {
 
 backup_configs() {
     echo -e "${RED}${BOLD}!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!${NC}"
-    echo -e "${ORANGE}This script will overwrite your existing configs."
-    echo -e "It is highly recommended to create a backup of:"
-    echo -e "  - ~/.config"
-    echo -e "  - ~/.local"
-    echo -e "  - ~/.bashrc${NC}"
-    echo -e "${RED}${BOLD}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!${NC}\n"
+    echo -e "${ORANGE}This script will surgically update your configuration files."
+    echo -e "A backup of your current setup will be created first.${NC}"
+    echo -e "Backup location: ~/hypr_dots_backup_[timestamp]\n"
 
     read -rp "Do you want to create a backup now? (y/n): " backup_choice
 
@@ -72,17 +68,13 @@ backup_configs() {
         for item in "${items_to_backup[@]}"; do
             if [[ -e "$HOME/$item" ]]; then
                 echo -e "  -> Backing up ~/$item..."
-                # Copy the user's actual home directory folder
                 cp -a "$HOME/$item" "$backup_dir/"
                 
-                # Safety check: If the user cloned the repo inside the folder we just backed up,
-                # remove the cloned repo from the backup directory to prevent recursion/bloat.
+                # Exclude the repo directory itself if it's stored within a backed-up folder
                 if [[ "$REPO_DIR" == "$HOME/$item"* ]]; then
                     local rel_path="${REPO_DIR#$HOME/}"
                     rm -rf "$backup_dir/$rel_path"
                 fi
-            else
-                echo -e "  -> Skipping ~/$item (not found)"
             fi
         done
         echo -e "${GREEN}Backup complete!${NC}"
@@ -91,24 +83,6 @@ backup_configs() {
         sleep 3
     fi
     echo "-------------------------------------------------------"
-}
-
-install_aur_helper_logic() {
-    local helper=$1
-    local repo_url="https://aur.archlinux.org/${helper}.git"
-    
-    echo -e "${YELLOW}Installing ${helper}...${NC}"
-    sudo pacman -S --needed --noconfirm base-devel git
-    
-    local tmp_dir
-    tmp_dir=$(mktemp -d)
-    git clone "$repo_url" "$tmp_dir/$helper"
-    
-    (
-        cd "$tmp_dir/$helper"
-        makepkg -si --noconfirm
-    )
-    rm -rf "$tmp_dir"
 }
 
 setup_aur_helper() {
@@ -121,61 +95,57 @@ setup_aur_helper() {
         export AUR_HELPER="paru"
         echo -e "${GREEN}[OK] 'paru' detected.${NC}"
     else
-        echo -e "${ORANGE}No AUR helper found. Please select one to install:${NC}"
-        PS3="Please enter your choice (1 or 2): "
-        local options=("yay" "paru")
-        
-        select opt in "${options[@]}"; do
-            case $opt in
-                "yay"|"paru")
-                    export AUR_HELPER="$opt"
-                    install_aur_helper_logic "$opt"
-                    break
-                    ;;
-                *) echo -e "${RED}Invalid option $REPLY. Try again.${NC}";;
-            esac
-        done
+        echo -e "${ORANGE}No AUR helper found. Installing yay...${NC}"
+        sudo pacman -S --needed --noconfirm base-devel git
+        local tmp_dir=$(mktemp -d)
+        git clone https://aur.archlinux.org/yay.git "$tmp_dir/yay"
+        (cd "$tmp_dir/yay" && makepkg -si --noconfirm)
+        rm -rf "$tmp_dir"
+        export AUR_HELPER="yay"
     fi
     echo "-------------------------------------------------------"
 }
 
 install_hyprland_dependencies() {
-    echo -e "${YELLOW}Preparing to install dependencies...${NC}"
+    echo -e "${YELLOW}Categorizing and sorting dependencies...${NC}"
 
-    # Master list of dependencies
-    local deps=(
-        # Fonts
+    local raw_deps=(
         ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-common
         ttf-nerd-fonts-symbols-mono ttf-noto-nerd noto-fonts-cjk noto-fonts-emoji
-        ttf-cascadia-code-nerd cantarell-fonts ttf-ms-fonts
-        # Apps & Tools
-        waybar fastfetch pavucontrol swaync libnotify hyprsunset hypridle
-        hyprlock playerctl hyprshot hyprpicker awww imagemagick rofi-wayland
-        wl-clipboard cliphist matugen
-        # Management
-        git base-devel stow github-cli less
-        # System
-        polkit-gnome network-manager-applet ddcutil xdg-desktop-portal-gtk
-        xdg-desktop-portal-hyprland archlinux-xdg-menu
-        # Shell & Theme
-        bash bash-completion starship wlogout qt6ct-kde nwg-look 
-        bibata-cursor-theme darkly adw-gtk-theme python-pywalfox
+        ttf-cascadia-code-nerd cantarell-fonts ttf-ms-fonts waybar fastfetch 
+        pavucontrol swaync libnotify hyprsunset hypridle hyprlock playerctl 
+        hyprshot hyprpicker awww imagemagick rofi-wayland wl-clipboard 
+        cliphist matugen git base-devel github-cli less polkit-gnome 
+        network-manager-applet ddcutil xdg-desktop-portal-gtk 
+        xdg-desktop-portal-hyprland archlinux-xdg-menu bash bash-completion 
+        starship wlogout qt6ct-kde nwg-look bibata-cursor-theme darkly 
+        adw-gtk-theme python-pywalfox
     )
+
+    # Ensure the dependency list itself is unique and sorted
+    readarray -t deps < <(printf "%s\n" "${raw_deps[@]}" | sort -u)
+
+    # Build an associative array of all official repository packages.
+    # We use 'sort -u' on the pacman output to ensure each package is indexed only once.
+    declare -A repo_cache
+    while read -r pkg_name; do
+        repo_cache["$pkg_name"]=1
+    done < <(pacman -Slq | sort -u)
 
     local repo_pkgs=()
     local aur_pkgs=()
 
-    echo -e "Sorting packages into Official Repos and AUR..."
     for pkg in "${deps[@]}"; do
-        if pacman -Si "$pkg" &> /dev/null; then
+        if [[ ${repo_cache[$pkg]:-0} -eq 1 ]]; then
             repo_pkgs+=("$pkg")
         else
             aur_pkgs+=("$pkg")
         fi
     done
 
-    echo -e "${GREEN}Found ${#repo_pkgs[@]} repo packages.${NC}"
-    echo -e "${ORANGE}Found ${#aur_pkgs[@]} AUR packages.${NC}"
+    # Output the categorization for verification
+    echo -e "${GREEN}Official Repository Packages (${#repo_pkgs[@]}):${NC} $(IFS=', '; echo "${repo_pkgs[*]}")"
+    echo -e "${ORANGE}AUR Packages (${#aur_pkgs[@]}):${NC} $(IFS=', '; echo "${aur_pkgs[*]}")"
 
     if [[ ${#repo_pkgs[@]} -gt 0 ]]; then
         echo -e "\n${YELLOW}Installing Official Repository Packages...${NC}"
@@ -186,8 +156,47 @@ install_hyprland_dependencies() {
         echo -e "\n${YELLOW}Installing AUR Packages with $AUR_HELPER...${NC}"
         "$AUR_HELPER" -S --needed --noconfirm "${aur_pkgs[@]}"
     fi
+    
+    echo "-------------------------------------------------------"
+}
 
-    echo -e "${GREEN}All dependencies installed successfully!${NC}"
+deploy_dotfiles() {
+    echo -e "${YELLOW}Surgically deploying dotfiles...${NC}"
+
+    # Handle subdirectories in .config and .local
+    local base_dirs=(".config" ".local")
+
+    for dir in "${base_dirs[@]}"; do
+        if [[ -d "$REPO_DIR/$dir" ]]; then
+            echo -e "  -> Processing $dir content..."
+            mkdir -p "$HOME/$dir"
+            
+            for source_path in "$REPO_DIR/$dir"/*; do
+                local name=$(basename "$source_path")
+                local target_path="$HOME/$dir/$name"
+
+                # Only replace the specific subfolders found in the repo
+                if [[ -e "$target_path" ]]; then
+                    echo -e "     ${ORANGE}Updating $dir/$name...${NC}"
+                    rm -rf "$target_path"
+                fi
+                
+                cp -rf "$source_path" "$HOME/$dir/"
+            done
+        fi
+    done
+
+    # Handle individual dotfiles in the root of the repo
+    local standalone_files=(".bashrc")
+
+    for file in "${standalone_files[@]}"; do
+        if [[ -f "$REPO_DIR/$file" ]]; then
+            echo -e "  -> Updating $file..."
+            cp -f "$REPO_DIR/$file" "$HOME/$file"
+        fi
+    done
+
+    echo -e "${GREEN}Dotfiles deployed successfully!${NC}"
     echo "-------------------------------------------------------"
 }
 
@@ -199,6 +208,7 @@ check_os
 backup_configs
 setup_aur_helper
 install_hyprland_dependencies
+deploy_dotfiles
 
-echo -e "\n${GREEN}${BOLD}Setup phase complete!${NC}"
-
+echo -e "\n${GREEN}${BOLD}INSTALLATION COMPLETE!${NC}"
+echo -e "Please log out and log back in (or restart Hyprland) to apply changes."
