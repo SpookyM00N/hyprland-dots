@@ -140,7 +140,7 @@ install_hyprland_dependencies() {
 
 deploy_dotfiles() {
     echo -e "${YELLOW}Surgically deploying dotfiles...${NC}"
-    local base_dirs=(".config" ".local" ".themes")
+    local base_dirs=(".config" ".local" ".themes" "Pictures")
 
     for dir in "${base_dirs[@]}"; do
         if [[ -d "$REPO_DIR/$dir" ]]; then
@@ -183,3 +183,5 @@ setup_aur_helper
 install_hyprland_dependencies
 deploy_dotfiles
 show_summary
+
+sh $HOME/.local/bin/wallset -n
