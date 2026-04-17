@@ -92,7 +92,7 @@ install_hyprland_dependencies() {
         network-manager-applet ddcutil xdg-desktop-portal-gtk 
         xdg-desktop-portal-hyprland archlinux-xdg-menu bash bash-completion 
         starship wlogout qt6ct-kde nwg-look bibata-cursor-theme darkly-qt6-git 
-        adw-gtk-theme python-pywalfox
+        python-pywalfox
     )
 
     readarray -t deps < <(printf "%s\n" "${raw_deps[@]}" | sort -u)
@@ -140,7 +140,7 @@ install_hyprland_dependencies() {
 
 deploy_dotfiles() {
     echo -e "${YELLOW}Surgically deploying dotfiles...${NC}"
-    local base_dirs=(".config" ".local")
+    local base_dirs=(".config" ".local" ".themes")
 
     for dir in "${base_dirs[@]}"; do
         if [[ -d "$REPO_DIR/$dir" ]]; then
