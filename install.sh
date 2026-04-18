@@ -40,14 +40,12 @@ fi
 # ---------------------------------------------------------
 echo "==> Installing packages..."
 
-# Pre-populated with core Wayland/Hyprland ecosystem components
-# Add any missing specific dependencies to this array
 PACKAGES=(
-    ttf-jetbrains-mono 2.304-2
-    ttf-jetbrains-mono-nerd 3.4.0-1
-    ttf-nerd-fonts-symbols-common 3.4.0-1
-    ttf-nerd-fonts-symbols-mono 3.4.0-1
-    ttf-noto-nerd 3.4.0-1
+    ttf-jetbrains-mono
+    ttf-jetbrains-mono-nerd
+    ttf-nerd-fonts-symbols-common
+    ttf-nerd-fonts-symbols-mono
+    ttf-noto-nerd
     noto-fonts-cjk
     noto-fonts-emoji
     ttf-cascadia-code-nerd
@@ -96,75 +94,81 @@ PACKAGES=(
 
 yay -S --needed "${PACKAGES[@]}" --noconfirm
 
+# ---------------------------------------------------------
+# 3. System Permissions & Configuration
+# ---------------------------------------------------------
+echo "==> Applying system configurations..."
+
+# Add user to i2c group (ensures group exists first)
+if grep -q "^i2c:" /etc/group; then
+    sudo usermod -aG i2c "$USER"
+    echo "Added $USER to i2c group."
+else
+    echo "Warning: i2c group does not exist. Skipping usermod."
+fi
+
+# Link arch-applications menu
+if [ -f "/etc/xdg/menus/arch-applications.menu" ]; then
+    sudo ln -sf /etc/xdg/menus/arch-applications.menu /etc/xdg/menus/applications.menu
+    echo "Linked arch-applications.menu to applications.menu."
+else
+    echo "Warning: arch-applications.menu not found."
+fi
 
 # ---------------------------------------------------------
-# 3. Move Dotfiles
+# 4. Move Dotfiles
 # ---------------------------------------------------------
 echo "==> Deploying dotfiles..."
 
-# Ensure we are working from the directory the script is located in
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Create target directories if they don't exist
 mkdir -p "$HOME/.config" "$HOME/.local" "$HOME/.themes" "$HOME/Pictures"
 
-# Copy directories
-# Using rsync to merge folders cleanly without overwriting entirely unrelated files
-echo "Copying to ~/.config..."
+echo "Copying directories..."
 cp -r .config/* "$HOME/.config/" 2>/dev/null || true
-
-echo "Copying to ~/.local..."
 cp -r .local/* "$HOME/.local/" 2>/dev/null || true
-
-echo "Copying to ~/.themes..."
 cp -r .themes/* "$HOME/.themes/" 2>/dev/null || true
-
-echo "Copying to ~/Pictures..."
 cp -r Pictures/* "$HOME/Pictures/" 2>/dev/null || true
+
+echo "Copying .bashrc..."
+if [ -f ".bashrc" ]; then
+    cp .bashrc "$HOME/.bashrc"
+fi
 
 # Ensure the wallset script is executable
 if [ -f "$HOME/.local/bin/wallset" ]; then
     chmod +x "$HOME/.local/bin/wallset"
 fi
 
-
 # ---------------------------------------------------------
-# 4. Start awww-daemon & Run wallset
+# 5. Start awww-daemon & Run wallset
 # ---------------------------------------------------------
-chmod +x $HOME/.local/bin/*
+chmod +x "$HOME/.local/bin/*
 
 echo "==> Initializing wallpaper daemon..."
 
-# Note: If this script is run from a TTY (outside of a Wayland session), 
-# awww-daemon might fail to start. It will succeed if run from within Hyprland.
 if [ "$WAYLAND_DISPLAY" ]; then
-    awww-daemon &
-    
-    # Give the daemon a moment to initialize before calling the wallset script
-    sleep 2 
+    if pgrep -x "awww-daemon" > /dev/null; then
+        echo "awww-daemon is already running."
+    else
+        echo "Starting awww-daemon..."
+        awww-daemon &
+        sleep 2
+    fi
     
     if [ -f "$HOME/.local/bin/wallset" ]; then
         sh "$HOME/.local/bin/wallset" -n
-    else
-        echo "Warning: wallset script not found in $HOME/.local/bin/"
     fi
 else
-    echo "Notice: Not currently in a Wayland session. Skipping awww-daemon execution."
+    echo "Notice: Wayland session not detected. Skipping daemon launch."
 fi
-
-# ---------------------------------------------------------
-# 5. Setting-up somethings
-# ---------------------------------------------------------
-
-sudo usermod -aG i2c $USER
-sudo ln -sf /etc/xdg/menus/arch-applications.menu /etc/xdg/menus/applications.menu
 
 # ---------------------------------------------------------
 # 6. Reboot
 # ---------------------------------------------------------
 echo "==> Installation Complete!"
-echo "System will reboot in 5 seconds. Press Ctrl+C to cancel the reboot."
+echo "System will reboot in 5 seconds..."
 
 sleep 5
 systemctl reboot
