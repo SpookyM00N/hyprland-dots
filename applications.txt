@@ -37,7 +37,6 @@ MANAGEMENT:
 
 git
 base-devel
-stow
 github-cli : gh auth login
 less
 
