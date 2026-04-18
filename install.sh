@@ -92,7 +92,7 @@ install_hyprland_dependencies() {
         network-manager-applet ddcutil xdg-desktop-portal-gtk 
         xdg-desktop-portal-hyprland archlinux-xdg-menu bash bash-completion 
         starship wlogout qt6ct-kde nwg-look bibata-cursor-theme darkly-qt6-git 
-        python-pywalfox
+        python-pywalfox satty 
     )
 
     readarray -t deps < <(printf "%s\n" "${raw_deps[@]}" | sort -u)
@@ -184,4 +184,9 @@ install_hyprland_dependencies
 deploy_dotfiles
 show_summary
 
+
+sudo ln -sf /etc/xdg/menus/arch-applications.menu /etc/xdg/menus/applications.menu
+chmod +x $HOME/.local/bin/*
 sh $HOME/.local/bin/wallset -n
+reboot
+
