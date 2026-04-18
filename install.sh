@@ -88,7 +88,7 @@ PACKAGES=(
     qt6ct-kde
     nwg-look
     bibata-cursor-theme
-    darkly
+    darkly-qt6
     python-pywalfox
 )
 
@@ -144,8 +144,6 @@ fi
 # ---------------------------------------------------------
 # 5. Start awww-daemon & Run wallset
 # ---------------------------------------------------------
-chmod +x "$HOME/.local/bin/*
-
 echo "==> Initializing wallpaper daemon..."
 
 if [ "$WAYLAND_DISPLAY" ]; then
