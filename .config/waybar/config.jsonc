@@ -154,7 +154,7 @@
             "default": ["", ""]
         },
         "scroll-step": 1,
-        "on-click": "pavucontrol",
+        "on-click": "pavucontrol-qt",
 	"on-click-right": "audswitch",
         "ignored-sinks": ["Easy Effects Sink"]
     },

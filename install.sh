@@ -86,7 +86,7 @@ install_hyprland_dependencies() {
         ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-common
         ttf-nerd-fonts-symbols-mono ttf-noto-nerd noto-fonts-cjk noto-fonts-emoji
         ttf-cascadia-code-nerd cantarell-fonts ttf-ms-fonts waybar fastfetch 
-        pavucontrol swaync libnotify hyprsunset hypridle hyprlock playerctl 
+        pavucontrol-qt swaync libnotify hyprsunset hypridle hyprlock playerctl 
         hyprshot hyprpicker awww imagemagick rofi-wayland wl-clipboard 
         cliphist matugen git base-devel github-cli less polkit-gnome 
         network-manager-applet ddcutil xdg-desktop-portal-gtk 

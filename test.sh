@@ -95,7 +95,7 @@ install_hyprland_dependencies() {
         cantarell-fonts cliphist darkly-qt6-git ddcutil fastfetch git github-cli
         hypridle hyprlock hyprpicker hyprshot hyprsunset imagemagick less libnotify
         matugen network-manager-applet noto-fonts-cjk noto-fonts-emoji nwg-look
-        pavucontrol playerctl polkit-gnome python-pywalfox qt6ct-kde rofi-wayland
+        pavucontrol-qt playerctl polkit-gnome python-pywalfox qt6ct-kde rofi-wayland
         starship swaync ttf-cascadia-code-nerd ttf-jetbrains-mono
         ttf-jetbrains-mono-nerd ttf-ms-fonts ttf-nerd-fonts-symbols-common
         ttf-nerd-fonts-symbols-mono ttf-noto-nerd waybar wl-clipboard wlogout
