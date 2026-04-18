@@ -142,7 +142,21 @@ if [ -f "$HOME/.local/bin/wallset" ]; then
 fi
 
 # ---------------------------------------------------------
-# 5. Start awww-daemon & Run wallset
+# 5. Cleanup Conflicts (Remove dunst)
+# ---------------------------------------------------------
+echo "==> Removing conflicting packages (dunst)..."
+
+if pacman -Qs dunst > /dev/null; then
+    sudo pacman -Rns dunst --noconfirm
+    # Kill any active instances to free up the notification daemon interface
+    killall dunst 2>/dev/null || true
+    echo "dunst removed successfully."
+else
+    echo "dunst is not installed. Skipping."
+fi
+
+# ---------------------------------------------------------
+# 6. Start awww-daemon & Run wallset
 # ---------------------------------------------------------
 echo "==> Initializing wallpaper daemon..."
 
@@ -163,7 +177,7 @@ else
 fi
 
 # ---------------------------------------------------------
-# 6. Reboot
+# 7. Reboot
 # ---------------------------------------------------------
 echo "==> Installation Complete!"
 echo "System will reboot in 5 seconds..."
