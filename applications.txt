@@ -17,7 +17,7 @@ APPLICATIONS:
 
 waybar
 fastfetch
-pavucontrol
+pavucontrol-qt
 swaync + libnotify 
 hyprsunset
 hypridle
@@ -30,6 +30,8 @@ rofi
 wl-clipboard
 cliphist
 matugen
+satty
+btop
 
 MANAGEMENT:
 
@@ -43,7 +45,7 @@ SYSTEM:
 
 polkit-gnome
 network-manager-applet
-ddcutil: brightness-controlling
+ddcutil
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 archlinux-xdg-menu
@@ -59,5 +61,4 @@ qt6ct-kde
 nwg-look
 bibata-cursor-theme: cursor
 darkly
-adw-gtk-theme
 python-pywalfox
