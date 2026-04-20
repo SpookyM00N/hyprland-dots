@@ -48,6 +48,7 @@ ddcutil
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 archlinux-xdg-menu
+swayosd 
 
 USER SHELL:
 bash

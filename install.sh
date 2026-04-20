@@ -77,6 +77,7 @@ PACKAGES=(
     polkit-gnome
     network-manager-applet
     ddcutil
+    swayosd
     i2c-tools
     xdg-desktop-portal-gtk
     xdg-desktop-portal-hyprland
