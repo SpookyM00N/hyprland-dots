@@ -3,7 +3,7 @@
     "margin-top": 8,
     "margin-left": 10,
     "margin-right": 10,
-    "modules-left": ["group/pillleft1","group/pillleft2"],
+    "modules-left": ["group/pillleft1","group/pillleft2","group/pillleft3"],
     "modules-center": ["group/pillcenter"],
     "modules-right": ["group/pillright","group/pillright1","group/pillright2"],
 
@@ -20,7 +20,12 @@
 	    "wlr/taskbar"
         ]
     },
-
+    "group/pillleft3": {
+        "orientation": "inherit",
+        "modules": [
+            "mpris"
+        ]
+    },
     "group/pillcenter": {
         "orientation": "inherit",
         "modules": [
@@ -83,6 +88,36 @@
         "ignore-list": [
             ""
         ],
+    },
+
+    "mpris": {
+    	"justify": "center",
+    	"dynamic-importance-order" : ["title", "artist", "album"],
+    	"dynamic-order:" : ["title", "artist", "album"],
+    	"format": "{player_icon} {dynamic}",
+    	"format-paused": "{status_icon} <i> {dynamic} </i>",
+    	"format-stopped": "{status_icon}",
+    	"interval": 1,
+    	"dynamic-separator": "  ",
+    	"player-icons": {
+      	    "default": "\u25b6",
+      	    "mpv": "\ud83c\udfb5",
+      	    "spotify": "\uf1bc",
+      	    "vlc": "\uf8e0"
+    	},
+    	"status-icons": {
+      	    "paused": "\uf04c",
+      	    "playing": "\uf04b",
+      	    "stopped": "\uf04d"
+    	},
+    	"max-length": 35,
+    	"on-click": "playerctl play-pause",
+    	"on-click-middle": "playerctl previous",
+    	"on-scroll-up": "playerctl position 1-",
+    	"on-scroll-down": "playerctl position 1+",
+    	"tooltip": true,
+    	"tooltip-format": "{title}\nby: {artist}\n{position} / {length}\nPlayer: {player}\n\n󰐎 Click to play/pause\n󰺤 Scroll to seek\n󰙤 Middle click previous\n󰙢 Right click next",
+    	"tooltip-format-stopped": "Player: {player}\n\n󰐎 Click to play/pause\n󰺤 Scroll to seek\n󰙤 Middle click previous\n󰙢 Right click next"
     },
 
     "custom/hyprsunset": {

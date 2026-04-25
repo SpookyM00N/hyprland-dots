@@ -51,7 +51,7 @@ tooltip > box {
 }
 
 /* All following pertains to hyprland/workspaces module styling */
-#pillleft1 {
+#pillleft1, #pillleft3 {
     background-color: alpha(@secondary_container, .45); /* rgba(30, 30, 46, 0.85); */
     border-radius: 5px;
     color: @primary; /* #aca3c9 */
