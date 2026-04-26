@@ -92,6 +92,11 @@ PACKAGES=(
     darkly-qt6
     python-pywalfox
     playerctl
+    ark
+    onlyoffice-bin
+    steam
+    gamescope
+    heroic-games-launcher-bin
 )
 
 yay -S --needed "${PACKAGES[@]}" --noconfirm
