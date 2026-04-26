@@ -91,6 +91,7 @@ PACKAGES=(
     bibata-cursor-theme
     darkly-qt6
     python-pywalfox
+    playerctl
 )
 
 yay -S --needed "${PACKAGES[@]}" --noconfirm
