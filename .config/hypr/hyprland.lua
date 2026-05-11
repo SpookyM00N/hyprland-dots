@@ -1,7 +1,7 @@
 --- SOURCES ---
 
 --- MATUGEN COLORS ---
--- require ("colors")
+local matu = require ("colors")
 
 --- MONITORS ---
 
@@ -83,8 +83,8 @@ hl.config({
 		border_size = 2,
 		
 		col = {
-			active_border = "rgba(ffffffff)",
-			inactive_border = "rgba(00000000)",
+			active_border = matu.primary,
+			inactive_border = matu.outline_variant,
 		},
 
 		resize_on_border = false,
