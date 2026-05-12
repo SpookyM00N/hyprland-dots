@@ -294,7 +294,26 @@ hl.window_rule({
 hl.window_rule({
 	name = "floating-windows",
 	match = {
-		class = "^blueman-manager$|".."^pavucontrol-qt$|".."nm-(applet|connection-editor)|".."^com.gabm.satty$|".."^vlc$|".."^kvantummanager$|".."^qt[56]ct$|".."^nwg-look$|".."polkit-gnome-authentication-agent-1|".."^net.davidotek.pupgui2$|".."^protonup-qt$|".."^DesktopEditors$|".."^xdg-desktop-portal-gtk$|".."console-dropdown|".."Choose Files|".."Save As|".."Confirm to replace files|".."File Operation Progress|".."Open|".."Authentication Required"
+		class = "^blueman-manager$|"..
+			"^pavucontrol-qt$|"..
+			"nm-(applet|connection-editor)|"..
+			"^com.gabm.satty$|"..
+			"^vlc$|"..
+			"^kvantummanager$|"..
+			"^qt[56]ct$|"..
+			"^nwg-look$|"..
+			"polkit-gnome-authentication-agent-1|"..
+			"^net.davidotek.pupgui2$|"..
+			"^protonup-qt$|"..
+			"^DesktopEditors$|"..
+			"^xdg-desktop-portal-gtk$|"..
+			"console-dropdown|"..
+			"Choose Files|"..
+			"Save As|"..
+			"Confirm to replace files|"..
+			"File Operation Progress|"..
+			"Open|"..
+			"Authentication Required"
 	},
 
 	float = true,
@@ -316,7 +335,9 @@ hl.window_rule({
 hl.window_rule({
 	name = "translucent_apps_1",
 	match = {
-		class = "^kitty$|".."^org.kde.dolphin$|".."^org.kde.ark$"
+		class = "^kitty$|"..
+			"^org.kde.dolphin$|"..
+			"^org.kde.ark$"
 	},
 
 	opacity = "0.80 0.80 1",
@@ -325,7 +346,10 @@ hl.window_rule({
 hl.window_rule({
 	name = "translucent_apps_2",
 	match = {
-		class = "^[Ss]team$|".."^steamwebhelper$|".."^[Ss]potify$|".."^heroic$"
+		class = "^[Ss]team$|"..
+			"^steamwebhelper$|"..
+			"^[Ss]potify$|"..
+			"^heroic$"
 	},
 
 	opacity = "0.70 0.70 1",
@@ -334,7 +358,9 @@ hl.window_rule({
 hl.window_rule({
         name = "translucent_browsers",
         match = {
-                class = "firefox$|".."^waterfox$|".."^brave-browser$|"
+                class = "firefox$|"..
+			"^waterfox$|"..
+			"^brave-browser$|"
         },
 
         opacity = "0.90 0.80 1",
@@ -348,7 +374,8 @@ hl.window_rule({ match = { class = "^steam_app_.*$" }, fullscreen = true })
 hl.layer_rule({
 	name = "no_ignore_alpha_blur",
 	match = {
-		namespace = "waybar|".."logout_dialog"
+		namespace = "waybar|"..
+			    "logout_dialog"
 	},
 
 	blur = true,
@@ -357,7 +384,10 @@ hl.layer_rule({
 hl.layer_rule({
 	name = "blurred_layers",
 	match = {
-		namespace = "swaync-notification-window|".."swaync-control-center|".."rofi|".."swayosd"
+		namespace = "swaync-notification-window|"..
+			    "swaync-control-center|"..
+			    "rofi|"..
+			    "swayosd"
 	},
 
 	blur = true,
