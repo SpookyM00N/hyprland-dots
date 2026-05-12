@@ -17,7 +17,6 @@ hl.monitor ({
 local terminal = "kitty"
 local fileManager = "dolphin"
 local bar = "waybar"
-local osdclient = "swayosd-client"
 
 --- AUTOSTART ---
 -- See https://wiki.hypr.land/Configuring/Basics/Autostart/
@@ -226,9 +225,9 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 --- Laptop multimedia keys for volume and LCD brightness ---
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(osdclient .. "--output-volume raise"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(osdclient .. "--output-volume lower"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(osdclient .. "--output-volume mute-toggle"),     { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("swayosd-client --output-volume raise"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("swayosd-client --output-volume lower"),      { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"),     { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
 
 --- Brightness Control ---
@@ -236,10 +235,10 @@ hl.bind("F6", hl.dsp.exec_cmd("brightness.sh +"), { locked = true, repeating = t
 hl.bind("F5", hl.dsp.exec_cmd("brightness.sh -"), { locked = true, repeating = true})
 
 --- Requires playerctl ---
-hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
-hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("swayosd-client --playerctl next"),       { locked = true })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
+hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"), { locked = true })
+hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("swayosd-client --playerctl previous"),   { locked = true })
 
 --- ScreenShot Keybinds Requires hyprshot and hyprpicker ---
 hl.bind("Print", hl.dsp.exec_cmd("killall hyprshot|| hyprshot -zm output"))
