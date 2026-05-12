@@ -40,7 +40,7 @@ end)
 
 --- DIRECTORIES ---
 hl.env("PATH", os.getenv("PATH") .. ":" .. os.getenv("HOME") .. "/.local/bin")
-hl.env("HYPRSHOT_DIR", "$HOME/Pictures/Screenshots")
+hl.env("HYPRSHOT_DIR",os.getenv("HOME").."/Pictures/Screenshots")
 
 --- CURSER_THEME ---
 hl.env("XCURSOR_THEME", "Bibata-Modern-Ice")
@@ -99,8 +99,8 @@ hl.config({
 
 		shadow = {
 			enabled = true,
-			range = 4,
-			render_power = 3,
+			range = 5,
+			render_power = 1,
 			color = "rgba(1a1a1aee)",
 		},
 
@@ -232,8 +232,8 @@ hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(osdclient .. "--output-volume mu
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
 
 --- Brightness Control ---
-hl.bind(mainMod .. " + F6", hl.dsp.exec_cmd("brightness.sh +"))
-hl.bind(mainMod .. " + F5", hl.dsp.exec_cmd("brightness.sh -"))
+hl.bind("F6", hl.dsp.exec_cmd("brightness.sh +"), { locked = true, repeating = true})
+hl.bind("F5", hl.dsp.exec_cmd("brightness.sh -"), { locked = true, repeating = true})
 
 --- Requires playerctl ---
 hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
