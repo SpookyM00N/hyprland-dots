@@ -144,7 +144,7 @@ hl.curve("overshot", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1.05} } })
 hl.curve("smoothOut", { type = "bezier", points = { {0.5, 0}, {0.99, 0.99} } })
 hl.curve("smoothIn", { type = "bezier", points = { {0.5, -0.5},{0.68, 1.5} } })
 
-hl.animation({ leaf = "layersIn", enabled = true, speed = 6, bezier = "quart", style = "style top"})
+hl.animation({ leaf = "layersIn", enabled = true, speed = 6, bezier = "quart", style = "slide top"})
 hl.animation({ leaf = "layersOut", enabled = true, speed = 3, bezier = "quart", style = "fade"})
 hl.animation({ leaf = "windows", enabled = true, speed = 3, bezier = "overshot"})
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "smoothOut", style = "popin 50%"})
