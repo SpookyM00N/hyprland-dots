@@ -258,15 +258,16 @@ hl.window_rule({
 
 --- fix some dragging issues with XWayland ---
 hl.window_rule({ name  = "fix-xwayland-drags", 
-	match = { class = "^$",
-        title      = "^$",
-        xwayland   = true,
-        float      = true,
-        fullscreen = false,
-        pin        = false,
-    },
+match = { 
+	class = "^$",
+	title      = "^$",
+	xwayland   = true,
+	float      = true,
+	fullscreen = false,
+	pin        = false,
+},
 
-    no_focus = true,
+no_focus = true,
 })
 
 hl.window_rule({
