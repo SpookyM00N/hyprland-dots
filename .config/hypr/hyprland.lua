@@ -146,7 +146,7 @@ hl.curve("smoothIn", { type = "bezier", points = { {0.5, -0.5},{0.68, 1.5} } })
 
 hl.animation({ leaf = "layersIn", enabled = true, speed = 6, bezier = "quart", style = "slide top"})
 hl.animation({ leaf = "layersOut", enabled = true, speed = 3, bezier = "quart", style = "fade"})
-hl.animation({ leaf = "windows", enabled = true, speed = 3, bezier = "overshot"})
+hl.animation({ leaf = "windows", enabled = true, speed = 3, bezier = "overshot",style = "gnomed"})
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "smoothOut", style = "popin 50%"})
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "smoothIn", style = "popin 20%"})
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 3, bezier = "smoothIn", style = "slide"})
@@ -257,10 +257,8 @@ hl.window_rule({
 })
 
 --- fix some dragging issues with XWayland ---
-hl.window_rule({
-    name  = "fix-xwayland-drags",
-    match = {
-        class      = "^$",
+hl.window_rule({ name  = "fix-xwayland-drags", 
+	match = { class = "^$",
         title      = "^$",
         xwayland   = true,
         float      = true,
@@ -375,7 +373,7 @@ hl.layer_rule({
 	name = "no_ignore_alpha_blur",
 	match = {
 		namespace = "waybar|"..
-			    "logout_dialog"
+			    "logout_dialog|"
 	},
 
 	blur = true,
@@ -393,3 +391,31 @@ hl.layer_rule({
 	blur = true,
 	ignore_alpha = 0,
 })
+
+-- FUNCTIONS --
+-- enable/disable effects || gamemode --
+hl.bind(mainMod .. " + SHIFT + h", function ()
+    local game_mode = (hl.get_config("animations.enabled") == false)
+
+    if game_mode then
+        hl.exec_cmd("hyprctl reload")
+        return
+    end
+    
+    hl.config({
+        general = {
+            gaps_in = 0, gaps_out = 0, -- Disable gaps  
+            border_size = 0,
+        },
+
+        animations = {
+            enabled = false, -- Disable animations
+        },
+        
+        decoration = {
+            shadow = { enabled = false },
+            blur = { enabled = false },
+            rounding = 0,
+        }
+    })
+end)
