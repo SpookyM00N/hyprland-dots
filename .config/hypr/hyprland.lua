@@ -6,10 +6,10 @@ local matu = require ("colors")
 --- MONITORS ---
 
 hl.monitor ({
-	output = "",
-	mode = "1920x1080@75",
-	position = "auto",
-	scale = 1,
+    output = "",
+    mode = "1920x1080@75",
+    position = "auto",
+    scale = 1,
 })
 
 --- MY PROGRAMS ---
@@ -21,17 +21,17 @@ local bar = "waybar"
 --- AUTOSTART ---
 -- See https://wiki.hypr.land/Configuring/Basics/Autostart/
 hl.on("hyprland.start", function () 
-	hl.exec_cmd("swaync")
-	hl.exec_cmd("swayosd-server")
-	hl.exec_cmd("nm-applet")
-	hl.exec_cmd(bar)
-	hl.exec_cmd("hyprsunset.sh init")
-	hl.exec_cmd("hyprsunset & hypridle")
-	hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-	hl.exec_cmd("awww-daemon")
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME")
-	hl.exec_cmd("wl-paste --type text --watch cliphist store")
-	hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.exec_cmd("swaync")
+    hl.exec_cmd("swayosd-server")
+    hl.exec_cmd("nm-applet")
+    hl.exec_cmd(bar)
+    hl.exec_cmd("hyprsunset.sh init")
+    hl.exec_cmd("hyprsunset & hypridle")
+    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    hl.exec_cmd("awww-daemon")
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
 
 --- ENVIRONMENT VARIABLES ---
@@ -75,64 +75,64 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 -- Refer to https://wiki.hypr.land/Configuring/Basics/Variables/
 
 hl.config({
-	general = {
-		gaps_in = 4,
-		gaps_out = 10,
+    general = {
+        gaps_in = 4,
+        gaps_out = 10,
 
-		border_size = 2,
-		
-		col = {
-			active_border = matu.primary,
-			inactive_border = matu.outline_variant,
-		},
+        border_size = 2,
 
-		resize_on_border = false,
-		layout = "dwindle",
-	},
+        col = {
+            active_border = matu.primary,
+            inactive_border = matu.outline_variant,
+        },
 
-	decoration = {
-		rounding = 7,
-		rounding_power = 4,
-		active_opacity = 1.0,
-		inactive_opacity = 1.0,
+        resize_on_border = false,
+        layout = "dwindle",
+    },
 
-		shadow = {
-			enabled = true,
-			range = 5,
-			render_power = 1,
-			color = "rgba(1a1a1aee)",
-		},
+    decoration = {
+        rounding = 7,
+        rounding_power = 4,
+        active_opacity = 1.0,
+        inactive_opacity = 1.0,
 
-		blur = {
-			enabled = true,
-			size = 6,
-			passes = 3,
-			special = true,
-			vibrancy = 0.1696,
-		},
-	},
+        shadow = {
+            enabled = true,
+            range = 5,
+            render_power = 1,
+            color = "rgba(1a1a1aee)",
+        },
 
-	animations = {
-		enabled = true,
-	},
+        blur = {
+            enabled = true,
+            size = 6,
+            passes = 3,
+            special = true,
+            vibrancy = 0.1696,
+        },
+    },
 
-	dwindle = {
-		preserve_split = true,
-	},
+    animations = {
+        enabled = true,
+    },
 
-	master = {
-		new_status = "master",
-		new_on_active = focus,
-	},
-	
-	scrolling = {
-		fullscreen_on_one_column = true,
-	},
-	
-	misc = {
-		force_default_wallpaper = -1, -- Set to 0 or 1 to disable the anime mascot wallpapers
-		disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background.
-	},	
+    dwindle = {
+        preserve_split = true,
+    },
+
+    master = {
+        new_status = "master",
+        new_on_active = focus,
+    },
+
+    scrolling = {
+        fullscreen_on_one_column = true,
+    },
+
+    misc = {
+        force_default_wallpaper = -1, -- Set to 0 or 1 to disable the anime mascot wallpapers
+        disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background.
+    },	
 
 })
 
@@ -158,17 +158,17 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "quart",
 --- INPUT ---
 
 hl.config({
-	input = {
-		kb_layout = "us",
-		kb_variant = "",
-		kb_model = "",
-		kb_options = "",
-		kb_rules = "",
+    input = {
+        kb_layout = "us",
+        kb_variant = "",
+        kb_model = "",
+        kb_options = "",
+        kb_rules = "",
 
-		follow_mouse = 1,
-		sensitivity = 0,
-		force_no_accel = true,
-	},
+        follow_mouse = 1,
+        sensitivity = 0,
+        force_no_accel = true,
+    },
 })
 
 hl.device({
@@ -257,112 +257,110 @@ hl.window_rule({
 })
 
 --- fix some dragging issues with XWayland ---
-hl.window_rule({ name  = "fix-xwayland-drags", 
-	match = { 
-		class = "^$",
-		title      = "^$",
-		xwayland   = true,
-		float      = true,
-		fullscreen = false,
-		pin        = false,
-	},
+hl.window_rule({ name  = "fix-xwayland-drags", match = { class      = "^$",
+title      = "^$",
+xwayland   = true,
+float      = true,
+fullscreen = false,
+pin        = false,
+    },
 
-	no_focus = true,
+    no_focus = true,
 })
 
 hl.window_rule({
-        name  = "suppress-maximize-events",
-        match = { class = ".*" },
+    name  = "suppress-maximize-events",
+    match = { class = ".*" },
 
-        suppress_event = "maximize",
+    suppress_event = "maximize",
 })
 
 --- Picture in Picture windows ---
 hl.window_rule({
-	name = "picture_in_picture",
-	match = { title = "Picture-in-Picture|" },
+    name = "picture_in_picture",
+    match = { title = "Picture-in-Picture|" },
 
-	float = true,
-	keep_aspect_ratio = true,
-	move = {"monitor_w*0.68", "monitor_h*0.51" },
-	size = {"monitor_w*0.31", "monitor_h*0.31" },
-	pin = true,
+    float = true,
+    keep_aspect_ratio = true,
+    move = {"monitor_w*0.68", "monitor_h*0.51" },
+    size = {"monitor_w*0.31", "monitor_h*0.31" },
+    pin = true,
 })
 
 --- Floating Application Windows ---
 hl.window_rule({
-	name = "floating-windows",
-	match = {
-		class = "^blueman-manager$|"..
-			"^pavucontrol-qt$|"..
-			"nm-(applet|connection-editor)|"..
-			"^com.gabm.satty$|"..
-			"^vlc$|"..
-			"^kvantummanager$|"..
-			"^qt[56]ct$|"..
-			"^nwg-look$|"..
-			"polkit-gnome-authentication-agent-1|"..
-			"^net.davidotek.pupgui2$|"..
-			"^protonup-qt$|"..
-			"^DesktopEditors$|"..
-			"^xdg-desktop-portal-gtk$|"..
-			"console-dropdown|"..
-			"Choose Files|"..
-			"Save As|"..
-			"Confirm to replace files|"..
-			"File Operation Progress|"..
-			"Open|"..
-			"Authentication Required"
-	},
+    name = "floating-windows",
+    match = {
+        class = "^blueman-manager$|"..
+        "^pavucontrol-qt$|"..
+        "nm-(applet|connection-editor)|"..
+        "^com.gabm.satty$|"..
+        "^vlc$|"..
+        "^kvantummanager$|"..
+        "^qt[56]ct$|"..
+        "^nwg-look$|"..
+        "polkit-gnome-authentication-agent-1|"..
+        "^net.davidotek.pupgui2$|"..
+        "^protonup-qt$|"..
+        "^DesktopEditors$|"..
+        "^xdg-desktop-portal-gtk$|"..
+        "console-dropdown|"..
+        "Choose Files|"..
+        "Save As|"..
+        "Confirm to replace files|"..
+        "File Operation Progress|"..
+        "Open|"..
+        "Authentication Required"
+    },
 
-	float = true,
-	center = true,
-	opacity = "0.80 0.70 1",
+    float = true,
+    center = true,
+    opacity = "0.80 0.70 1",
 })
 
 hl.window_rule({
-	name = "dolphin_popups",
-	match = {
-		class = "^org.kde.dolphin$",
-		title = "^Progress Dialog - Dolphin$|".."^Copying - Dolphin$|".."^Delete Permanently — Dolphin$"
-	},
+    name = "dolphin_popups",
+    match = {
+        class = "^org.kde.dolphin$",
+        title = "^Progress Dialog - Dolphin$|".."^Copying - Dolphin$|".."^Delete Permanently — Dolphin$"
+    },
 
-	float = true,
+    float = true,
 })
 
 --- Translucent Windows ---
 hl.window_rule({
-	name = "translucent_apps_1",
-	match = {
-		class = "^kitty$|"..
-			"^org.kde.dolphin$|"..
-			"^org.kde.ark$"
-	},
+    name = "translucent_apps_1",
+    match = {
+        class = "^kitty$|"..
+        "^org.kde.dolphin$|"..
+        "^org.kde.ark$"
+    },
 
-	opacity = "0.80 0.80 1",
+    opacity = "0.80 0.80 1",
 })
 
 hl.window_rule({
-	name = "translucent_apps_2",
-	match = {
-		class = "^[Ss]team$|"..
-			"^steamwebhelper$|"..
-			"^[Ss]potify$|"..
-			"^heroic$"
-	},
+    name = "translucent_apps_2",
+    match = {
+        class = "^[Ss]team$|"..
+        "^steamwebhelper$|"..
+        "^[Ss]potify$|"..
+        "^heroic$"
+    },
 
-	opacity = "0.70 0.70 1",
+    opacity = "0.70 0.70 1",
 })
 
 hl.window_rule({
-        name = "translucent_browsers",
-        match = {
-                class = "firefox$|"..
-			"^waterfox$|"..
-			"^brave-browser$|"
-        },
+    name = "translucent_browsers",
+    match = {
+        class = "firefox$|"..
+        "^waterfox$|"..
+        "^brave-browser$|"
+    },
 
-        opacity = "0.90 0.80 1",
+    opacity = "0.90 0.80 1",
 })
 
 --- windowrule to force steam games/apps to fullscreen ---
@@ -371,26 +369,26 @@ hl.window_rule({ match = { class = "^steam_app_.*$" }, fullscreen = true })
 --- LAYERRULES ---
 
 hl.layer_rule({
-	name = "no_ignore_alpha_blur",
-	match = {
-		namespace = "waybar|"..
-			    "logout_dialog|"
-	},
+    name = "no_ignore_alpha_blur",
+    match = {
+        namespace = "waybar|"..
+        "logout_dialog"
+    },
 
-	blur = true,
+    blur = true,
 })
 
 hl.layer_rule({
-	name = "blurred_layers",
-	match = {
-		namespace = "swaync-notification-window|"..
-			    "swaync-control-center|"..
-			    "rofi|"..
-			    "swayosd"
-	},
+    name = "blurred_layers",
+    match = {
+        namespace = "swaync-notification-window|"..
+        "swaync-control-center|"..
+        "rofi|"..
+        "swayosd"
+    },
 
-	blur = true,
-	ignore_alpha = 0,
+    blur = true,
+    ignore_alpha = 0,
 })
 
 -- FUNCTIONS --
@@ -402,7 +400,7 @@ hl.bind(mainMod .. " + SHIFT + h", function ()
         hl.exec_cmd("hyprctl reload")
         return
     end
-    
+
     hl.config({
         general = {
             gaps_in = 0, gaps_out = 0, -- Disable gaps  
@@ -412,7 +410,7 @@ hl.bind(mainMod .. " + SHIFT + h", function ()
         animations = {
             enabled = false, -- Disable animations
         },
-        
+
         decoration = {
             shadow = { enabled = false },
             blur = { enabled = false },
@@ -420,4 +418,3 @@ hl.bind(mainMod .. " + SHIFT + h", function ()
         }
     })
 end)
-
