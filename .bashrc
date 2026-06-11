@@ -27,7 +27,7 @@ shopt -s autocd
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias c='clear'
-alias n='nano'
+alias n='nvim'
 
 alias home='cd ~'
 alias ..='cd ..'
