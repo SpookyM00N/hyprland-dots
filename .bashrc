@@ -34,25 +34,9 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias .3='cd ../../..'
 
-#History
-export HISTSIZE=1000
-export HISTFILE=~/.bash_history
-export HISTFILESIZE=$HISTSIZE
-export HISTCONTROL=ignoredups:erasedups:ignorespace
-shopt -s histappend
-
-#Set up XDG folders
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
-export XDG_CACHE_HOME="$HOME/.cache"
-
 #persistant history through different sessions
 PROMPT_COMMAND="history -a"
 
 #Prompt
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
 eval "$(starship init bash)"
-
-#Scripts directory
-export PATH="$PATH:$HOME/.local/bin"
