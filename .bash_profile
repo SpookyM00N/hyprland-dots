@@ -19,4 +19,4 @@ export HISTCONTROL=ignoredups:erasedups:ignorespace
 shopt -s histappend
 
 #Other .directories
-export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+export CUDA_CACHE_PATH="${XDG_CACHE_HOME:-$HOME/.cache}"/nv
