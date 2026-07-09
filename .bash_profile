@@ -20,3 +20,4 @@ shopt -s histappend
 
 #Other .directories
 export CUDA_CACHE_PATH="${XDG_CACHE_HOME:-$HOME/.cache}"/nv
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc":"$XDG_CONFIG_HOME/gtk-2.0/gtkrc.mine"
