@@ -46,10 +46,5 @@ output_path = '~/.config/rofi/colors.rasi'
 
 [templates.heroic]
 input_path = '~/.config/matugen/templates/heroic.css'
-output_path = '~/.themes/matugen.css'
-
-[templates.nvim]
-input_path = '~/.config/matugen/templates/nvim-colors.vim'
-output_path = '~/.config/nvim/colors/matugen.vim'
-post_hook = 'pkill -SIGUSR1 nvim'
+output_path = '~/.local/share/themes/matugen.css'
 
