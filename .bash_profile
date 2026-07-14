@@ -22,3 +22,4 @@ shopt -s histappend
 export CUDA_CACHE_PATH="${XDG_CACHE_HOME:-$HOME/.cache}"/nv
 export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc":"$XDG_CONFIG_HOME/gtk-2.0/gtkrc.mine"
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+export PULSE_COOKIE="$XDG_CONFIG_HOME/pulse/cookie"
