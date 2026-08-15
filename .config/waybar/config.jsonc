@@ -60,16 +60,13 @@
     },
 
     "hyprland/workspaces": {
-	"format": "{name}",
-	"format-icons": {
-		"1": "1",
-		"2": "2",
-		"3": "3",
-		"4": "4",
-		"5": "5",
-		"active": "",
-		"default": ""
-	},
+      "all-outputs": true,
+      "active-only": false,
+      "disable-scroll": false,
+      "tooltip": false,
+      "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({workspace=\"e-1\"})'",
+      "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({workspace=\"e+1\"})'",
+      "parsistant-workspaces": {}
     },
 
     "wlr/taskbar": {
