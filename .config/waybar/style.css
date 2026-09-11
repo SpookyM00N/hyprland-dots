@@ -1,141 +1,158 @@
 @import "colors.css";
 
-*{
-    border: none;
-    border-radius: 0;
-    font-family: "JetBrains Mono Nerd Font Propo";
-    font-size: 14px;
-    min-height: 0;
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrains Mono Nerd Font Propo";
+  font-size: 14px;
+  min-height: 0;
 }
 
 window#waybar {
-    background-color: alpha(@surface,.75);
-    min-height: 25px;
-    color: white;
-    padding: 10px 0;
-    border-radius: 8px;
+  background-color: alpha(@surface, .75);
+  min-height: 25px;
+  color: white;
+  padding: 10px 0;
+  border-radius: 8px;
 }
 
 tooltip {
-    background: alpha(@on_primary,0.8); /* rgba(30, 30, 46, 0.85); */
-    border: 1px solid @primary; /* #aca3c9 */
+  background: alpha(@on_primary, 0.8);
+  border: 1px solid @primary;
 }
 
 tooltip label {
   color: white;
 }
 
-tooltip > box {
+tooltip>box {
   background-color: initial;
 }
 
-#custom-hyprsunset, #clock {
-    padding: 2px 3px;
+#custom-hyprsunset,
+#clock {
+  padding: 2px 3px;
 }
 
-#tray, #network, #pulseaudio, #custom-brightness, #custom-clipboard, #custom-notification {
-    padding: 2px 6px;
+#tray,
+#network,
+#pulseaudio,
+#custom-brightness,
+#custom-clipboard,
+#custom-notification {
+  padding: 2px 6px;
 }
 
 #custom-hyprsunset.on {
-    color: #ffb86c; /* Warm Orange/Yellow */
-    border-radius: 10px;
+  color: #ffb86c;
+  /* Warm Orange/Yellow */
+  border-radius: 10px;
 }
 
 #custom-hyprsunset.off {
-    color: #6272a4; /* Dim Blue-Gray */
+  color: #6272a4;
+  /* Dim Blue-Gray */
 }
 
 #custom-power {
-    color: #f38ba8; /* catppuucin maroon */
+  color: #f38ba8;
+  /* catppuucin maroon */
 }
 
 /* All following pertains to hyprland/workspaces module styling */
-#pillleft1, #pillleft3 {
-    background-color: alpha(@secondary_container, .45); /* rgba(30, 30, 46, 0.85); */
-    border-radius: 5px;
-    color: @primary; /* #aca3c9 */
-    padding: 0 10px;
-    margin: 5px 10px 5px 10px;
+#pillleft1,
+#pillleft3 {
+  background-color: alpha(@secondary_container, .45);
+  border-radius: 5px;
+  color: @primary;
+  padding: 0 10px;
+  margin: 5px 10px 5px 10px;
 }
 
 #workspaces button {
-    box-shadow: none;
-    text-shadow: none;
-    padding: 0em;
-    margin-top: 5px;
-    margin-bottom: 5px; 
-    padding-left: 5px;
-    padding-right: 5px;
-    color: @on_secondary_container; /* #aca3c9 */
-    animation: ws_normal 20s ease-in-out 1;
+  box-shadow: none;
+  text-shadow: none;
+  padding: 0em;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: @on_secondary_container;
+  border-radius: 5px;
+  background-color: alpha(@surface, .2);
+  animation: ws_normal 20s ease-in-out 1;
 }
 
 #workspaces button.active {
-    background-color: @primary; /* #aca3c9 */
-    color: @on_primary; /* rgba(30, 30, 46, 0.85) */
-    border-radius: 5px;
-    margin: 5px 3px;
-    padding: 0 13px;
-    animation: ws_active 20s ease-in-out 1;
-    transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
+  background-color: @primary;
+  color: @on_primary;
+  border-radius: 5px;
+  margin: 5px 3px 5px 0;
+  padding: 0 13px;
+  animation: ws_active 20s ease-in-out 1;
+  transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
 #workspaces button:hover {
-    background: @on_secondary; /* #2c2542 */
-    color: #FFFFFF;
-    border-radius: 5px;
-    animation: ws_hover 20s ease-in-out 1;
-    transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
+  background: @on_secondary;
+  color: #FFFFFF;
+  border-radius: 5px;
+  animation: ws_hover 20s ease-in-out 1;
+  transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
 
-#pillleft2, #pillcenter, #pillright, #pillright1, #pillright2 {
-    background-color: alpha(@secondary_container, .45); /* rgba(30, 30, 46, 0.85) */
-    min-width: 20px;
-    color: @on_secondary_container; /* #aca3c9 */
-    border-radius: 5px;
-    padding: 2px 5px;
-    margin: 5px 10px 5px 10px;
+#pillleft2,
+#pillcenter,
+#pillright,
+#pillright1,
+#pillright2 {
+  background-color: alpha(@secondary_container, .45);
+  min-width: 20px;
+  color: @on_secondary_container;
+  border-radius: 5px;
+  padding: 2px 5px;
+  margin: 5px 10px 5px 10px;
 }
 
 
 /* All following pertains to wlr/taskbar module styling */
 #taskbar button {
-    box-shadow: none;
-    text-shadow: none;
-    padding: 0px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 0px;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-right: 0px;
-    color: #FFFFFF;
-    animation: tb_normal 20s ease-in-out 1;
+  box-shadow: none;
+  text-shadow: none;
+  padding: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-right: 0px;
+  color: #FFFFFF;
+  animation: tb_normal 20s ease-in-out 1;
 }
 
 #taskbar button.active {
-    background: @primary; /* #aca3c9 */
-    color: @on_primary; /* rgba(30, 30, 46, 0.85) */
-    border-radius: 5px;
-    margin-left: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-right: 5px;
-    animation: tb_active 20s ease-in-out 1;
-    transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
+  background: @primary;
+  color: @on_primary;
+  border-radius: 5px;
+  margin-left: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-right: 5px;
+  animation: tb_active 20s ease-in-out 1;
+  transition: all 0.4s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
 #taskbar button:hover {
-    background: @on_secondary; /* #aca3c9 */
-    color: #aca3c9;
-    border-radius: 5px;
-    animation: tb_hover 20s ease-in-out 1;
-    transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
+  background: @on_secondary;
+  color: #aca3c9;
+  border-radius: 5px;
+  animation: tb_hover 20s ease-in-out 1;
+  transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
 }
 
 #custom-power:hover {
-    background: @on_secondary; /* #2c2542 */
-    border-radius: 5px;
+  background: @on_secondary;
+  border-radius: 5px;
 }

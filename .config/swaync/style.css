@@ -1,13 +1,19 @@
 @import "colors.css";
 
-@define-color center-bg       alpha(@surface, 0.75); /*  rgba(8, 8, 11, 0.75) */
-@define-color background      @on_primary; /* #08080bcc */ 
-@define-color text            @primary; /* #acb0d0 */
-@define-color text-alt        @on_surface; /* #787c99 */
-@define-color background-alt  alpha(@secondary_container, 0.4); /* #0e0e14F5 */ 
-@define-color selected        alpha(@surface,.45); /* alpha(@text-alt, .4) */
-@define-color hover           alpha(@selected, .4);
-@define-color urgent          @text-alt;
+@define-color center-bg alpha(@surface, 0.75);
+/*  rgba(8, 8, 11, 0.75) */
+@define-color background @on_primary;
+/* #08080bcc */
+@define-color text @primary;
+/* #acb0d0 */
+@define-color text-alt @on_surface;
+/* #787c99 */
+@define-color background-alt alpha(@secondary_container, 0.4);
+/* #0e0e14F5 */
+@define-color selected alpha(@surface, .45);
+/* alpha(@text-alt, .4) */
+@define-color hover alpha(@selected, .4);
+@define-color urgent @text-alt;
 
 * {
   color: @text;
@@ -95,30 +101,30 @@
   background: @hover;
 }
 
-.notification > *:last-child > * {
+.notification>*:last-child>* {
   min-height: 3.2em;
 }
 
-.notification > *:last-child > * .notification-action {
+.notification>*:last-child>* .notification-action {
   background: @hover;
   margin: 0 6px 9px 6px;
   border-radius: 8px;
 }
 
-.notification > *:last-child > * .notification-action:hover {
+.notification>*:last-child>* .notification-action:hover {
   background: @selected;
 }
 
-.notification > *:last-child > * .notification-action:active {
+.notification>*:last-child>* .notification-action:active {
   background: @selected;
 }
 
 .control-center {
   background: @center-bg;
   border-radius: 0.6em;
-  border: 1px solid @background-alt;
+  border: 3px solid @background-alt;
   min-height: 750px;
-  margin: 7px;
+  margin: 9px;
   padding: 12px;
 }
 
@@ -129,7 +135,7 @@
 
 /* I dont want to see close buttons in notification center */
 .control-center .notification-background .close-button,
-.notification-group-close-button{
+.notification-group-close-button {
   opacity: 1;
 }
 
@@ -143,7 +149,7 @@
   color: @text;
 }
 
-.notification-group-headers > label {
+.notification-group-headers>label {
   margin: 0 3px;
   font-size: 1rem;
 }
@@ -156,15 +162,15 @@
 .notification-group-close-all-button {
   background: transparent;
   color: @text;
-  margin: 4px; 
+  margin: 4px;
   border-radius: 6px;
   padding: 4px;
 }
 
 /* Label */
 .widget-label {
-   padding-top: 2px;
-   padding-bottom: 5px;
+  padding-top: 2px;
+  padding-bottom: 5px;
 }
 
 /* Clear all Notifications */
@@ -189,14 +195,14 @@
 
 /* Do not disturb */
 .widget-dnd {
-  padding: 8px 14px; 
+  padding: 8px 14px;
   border-radius: 12px;
   margin: 5px 0;
   color: @text;
   background: @background-alt;
 }
 
-.widget-dnd > label {
+.widget-dnd>label {
   font-size: 1rem;
 }
 
@@ -239,21 +245,20 @@
 .widget-backlight trough {
   background: @hover;
   margin-left: 12px;
-  border-radius: 12px;  
+  border-radius: 12px;
 }
 
 .widget-volume highlight,
 .widget-backlight highlight {
   padding: 3.5px;
-  border-radius: 12px;  
-  background: @text;  
+  border-radius: 12px;
+  background: @text;
 }
 
 .widget-dnd switch:hover,
 .widget-buttons-grid button:hover,
 .control-center .notification-group-collapse-button:hover,
-.control-center .notification-group-close-all-button:hover
-{
+.control-center .notification-group-close-all-button:hover {
   background: @hover;
 }
 
@@ -261,7 +266,7 @@
   background: @background-alt;
   border-radius: 15px;
   margin: 5px 0;
-  padding: 0 10px; 
+  padding: 0 10px;
 }
 
 .mpris-overlay {
@@ -272,7 +277,7 @@
   background: @background-alt;
   color: @text;
   margin: 0 5px;
-  padding: 10px 0 15px; 
+  padding: 10px 0 15px;
 }
 
 /* Control buttons for mpris widget */
@@ -286,7 +291,7 @@
   margin: 0 2.5px;
 }
 
-.widget-mpris-player .mpris-overlay > box:last-child {
+.widget-mpris-player .mpris-overlay>box:last-child {
   border-radius: 16px;
   padding: 0 5px;
   background: alpha(@hover, .3);
@@ -301,12 +306,12 @@
 .widget-mpris-subtitle {
   font-weight: 700;
   margin: 0 3px;
-} 
+}
 
 .widget-mpris-title {
   font-size: 1.2rem;
 }
- 
+
 .widget-mpris-subtitle {
   font-size: 0.9rem;
   color: @text-alt;
@@ -319,13 +324,13 @@
 }
 
 .widget-buttons-grid button {
-  padding: 18px 22px; 
+  padding: 18px 22px;
   margin: 5px;
   background: @hover;
   border-radius: 15px;
 }
 
-.widget-buttons-grid button > label {
+.widget-buttons-grid button>label {
   font-size: 16px;
   color: @text;
 }
@@ -338,7 +343,7 @@
   background-color: @text;
 }
 
-.widget-buttons-grid button:checked > label {
+.widget-buttons-grid button:checked>label {
   color: @background;
 }
 
@@ -348,6 +353,6 @@
 }
 
 /* Avoid 'annoying' backgroud */
-.blank-window {  
-  background: transparent;  
+.blank-window {
+  background: transparent;
 }
