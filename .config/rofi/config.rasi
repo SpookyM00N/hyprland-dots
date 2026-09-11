@@ -16,6 +16,9 @@ configuration {
 
 //Main//
 window {
+              anchor: center;
+              location: north;
+              y-offset: 0.6em;
               height:  31em;
 	       width:  50em;
         transparency:  "real";

@@ -17,13 +17,13 @@ window {
 	    location:  northeast;
 	       width:  20em;
 	      height:  25em;
-	    x-offset:  -0.4em;
-	    y-offset:  0.4em;
+	    x-offset:  -0.6em;
+	    y-offset:  0.6em;
 	transparency:  "real";
 	  fullscreen:  false;
 	     enabled:  true;
 	      cursor:  "default";
-	      border:  0.1em;
+	      border:  0.2em;
         border-color:  @secondary-container; /* #aca3c9; */
        border-radius:  0.6em;
 }
