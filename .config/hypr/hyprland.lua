@@ -59,6 +59,7 @@ hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("SDL_VIDEODRIVER", "wayland")
 hl.env("GTK_THEME", "adw-gtk3")
+hl.env("GDK_WAYLAND_DISABLE","ext_background_effect_manager_v1")
 
 -- XDG Vars
 local XDG_CONFIG_HOME = os.getenv("HOME") .. "/.config"
