@@ -9,7 +9,7 @@ configuration {
  drun-display-format:  "{name}";
        window-format:  "{w}{t}";
 	        font:  "JetBrainsMono Nerd Font Propo Bold 10";
-	   kb-cancel: "MousePrimary";
+	   kb-cancel: "Escape";
 }
 
 @theme "~/.config/rofi/colors.rasi"

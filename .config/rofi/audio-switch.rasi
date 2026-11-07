@@ -2,6 +2,7 @@ configuration {
     show-icons:         false;
     font:               "Inter 11";
     disable-history:    true;
+    kb-cancel: "Escape";
 }
 
 @theme "~/.config/rofi/colors.rasi"

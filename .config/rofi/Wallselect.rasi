@@ -5,6 +5,7 @@ configuration {
     dmenu-display-format:        "{name}";
     font:                        "JetBrainsMono Nerd Font Propo Bold 10";
     cycle:			 true;
+    kb-cancel:			 "Escape";
 }
 
 @theme "~/.config/rofi/colors.rasi"
