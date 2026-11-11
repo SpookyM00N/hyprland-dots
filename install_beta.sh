@@ -220,7 +220,7 @@ fi
 log "Deploying dotfiles..."
 BACKUP_DIR="$HOME/.dotfiles-backup/$STAMP"
 SOURCES=()
-for item in .config .local .themes Pictures .bashrc; do
+for item in .config .local Pictures .bash_profile .bashrc; do
     if [[ -e "$SCRIPT_DIR/$item" ]]; then SOURCES+=("$item"); else warn "$item not found in repo; skipping."; fi
 done
 
