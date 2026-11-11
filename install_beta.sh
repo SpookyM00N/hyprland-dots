@@ -310,11 +310,14 @@ if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
     systemctl --user try-restart xdg-desktop-portal-hyprland.service \
         xdg-desktop-portal-gtk.service xdg-desktop-portal.service 2>/dev/null || true
 
+    # Make sure scripts deployed to ~/.local/bin (e.g. hyprsunset.sh) resolve by name, as in exec-once
+    case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+
     start_bg swaync
     start_bg swayosd-server
     start_bg nm-applet
     start_bg waybar        # your config uses $bar; adjust if it is not waybar
-    [[ -x "$HOME/.local/bin/hyprsunset.sh" ]] && start_bg "$HOME/.local/bin/hyprsunset.sh" init
+    start_bg hyprsunset.sh init
     start_bg hyprsunset
     start_bg hypridle
     start_bg /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
