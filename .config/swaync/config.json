@@ -27,7 +27,6 @@
     "widgets": [
       "label",
       "buttons-grid",
-      "mpris",
       "volume",
       "title",
       "notifications",
@@ -46,9 +45,9 @@
         },
         "volume": {
             "device": "default",
-            "label": "󰕾",
-	    "expand-button-label": "  ",
-      	    "collapse-button-label": "  ",
+            "label": "󰕾 ",
+	    "expand-button-label": "   ",
+      	    "collapse-button-label": "   ",
       	    "show-per-app": true,
             "show-per-app-icon": true,
             "slider": true
@@ -56,12 +55,6 @@
 
         "dnd": {
             "text": "Do not disturb"
-        },
-
-        "mpris": {
-            "image-size": 60,
-            "image-radius": 10,
-	    "width": 100
         },
 
         "buttons-grid": {
