@@ -10,9 +10,7 @@ set -Eeuo pipefail
 # ---------------------------------------------------------
 # Options, logging, helpers
 # ---------------------------------------------------------
-ASSUME_YES=0
-NO_REBOOT=0
-SKIP_CHAOTIC=0
+ASSUME_YES=0 NO_REBOOT=0 SKIP_CHAOTIC=0
 for arg in "$@"; do
     case "$arg" in
         -y|--yes)       ASSUME_YES=1 ;;
@@ -24,9 +22,10 @@ for arg in "$@"; do
 done
 
 CONFIRM=()
-(( ASSUME_YES )) && CONFIRM=(--noconfirm)
+if (( ASSUME_YES )); then CONFIRM=(--noconfirm); fi
 
-LOG="$HOME/hypr-install-$(date +%Y%m%d-%H%M%S).log"
+STAMP="$(date +%Y%m%d-%H%M%S)"
+LOG="$HOME/hypr-install-$STAMP.log"
 exec > >(tee -a "$LOG") 2>&1
 
 log()  { printf '\n==> %s\n' "$*"; }
@@ -34,9 +33,48 @@ warn() { printf 'WARNING: %s\n' "$*" >&2; }
 die()  { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
 SUDO_PID=""
-cleanup() { [[ -n "$SUDO_PID" ]] && kill "$SUDO_PID" 2>/dev/null || true; }
+cleanup() { if [[ -n "$SUDO_PID" ]]; then kill "$SUDO_PID" 2>/dev/null || true; fi; }
 trap cleanup EXIT
 trap 'die "Failed at line $LINENO: $BASH_COMMAND (log: $LOG)"' ERR
+
+# enable_now [--user] <unit>: enable + start a systemd unit if it exists
+enable_now() {
+    local scope=() as_root=(sudo)
+    if [[ $1 == --user ]]; then scope=(--user); as_root=(); shift; fi
+    local unit="$1"
+    if ! systemctl "${scope[@]}" cat "$unit" >/dev/null 2>&1; then
+        echo "unit not found, skipping: $unit"
+        return 0
+    fi
+    if "${as_root[@]}" systemctl "${scope[@]}" enable --now "$unit"; then
+        echo "enabled + started: $unit"
+    else
+        warn "could not enable/start $unit"
+    fi
+}
+
+# start_bg <command> [args...]: detached start (like `cmd & disown`, but survives the terminal closing).
+# Skips programs that are missing or already running. Output goes to /dev/null so the
+# process doesn't keep the log pipe open.
+start_bg() {
+    local bin="$1" running=1
+    if ! command -v "$bin" >/dev/null 2>&1; then
+        warn "not found, skipping: $bin"
+        return 0
+    fi
+    if (( $# > 1 )); then
+        pgrep -f -- "$*" >/dev/null || running=0
+    else
+        pgrep -f -- "(^|/)${bin##*/}( |$)" >/dev/null || running=0
+    fi
+    if (( running )); then
+        echo "already running: $*"
+    elif setsid -f "$@" >/dev/null 2>&1; then
+        echo "started: $*"
+    else
+        warn "failed to start: $*"
+    fi
+}
 
 # ---------------------------------------------------------
 # 0. Pre-flight checks
@@ -56,75 +94,69 @@ sudo -v
 ( while kill -0 "$$" 2>/dev/null; do sudo -n true; sleep 50; done ) &
 SUDO_PID=$!
 
+# Use all cores when building AUR packages
+export MAKEFLAGS="-j$(nproc)"
+
 # ---------------------------------------------------------
 # 1. pacman.conf: multilib (needed by Steam) + Chaotic-AUR
 # ---------------------------------------------------------
 log "Configuring pacman..."
-BACKUP_CONF="/etc/pacman.conf.bak.$(date +%Y%m%d)"
-[[ -f "$BACKUP_CONF" ]] || sudo cp /etc/pacman.conf "$BACKUP_CONF"
+need_multilib=0 need_chaotic=0
+grep -q '^\[multilib\]' /etc/pacman.conf || need_multilib=1
+if (( ! SKIP_CHAOTIC )); then grep -q '^\[chaotic-aur\]' /etc/pacman.conf || need_chaotic=1; fi
 
-if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
+if (( need_multilib || need_chaotic )); then
+    sudo cp /etc/pacman.conf "/etc/pacman.conf.bak.$STAMP"
+else
+    echo "pacman.conf already configured."
+fi
+
+if (( need_multilib )); then
     echo "Enabling [multilib] (required for Steam)..."
     sudo sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
     grep -q '^\[multilib\]' /etc/pacman.conf || warn "Could not enable [multilib]; enable it manually."
 fi
 
-if (( ! SKIP_CHAOTIC )); then
-    if ! grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
-        echo "Adding Chaotic-AUR..."
-        sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-        sudo pacman-key --lsign-key 3056513887B78AEB
-        sudo pacman -U "${CONFIRM[@]}" \
-            'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-            'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-        printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
-    else
-        echo "Chaotic-AUR already configured."
-    fi
+if (( need_chaotic )); then
+    echo "Adding Chaotic-AUR..."
+    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+    sudo pacman-key --lsign-key 3056513887B78AEB
+    sudo pacman -U "${CONFIRM[@]}" \
+        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+    printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
 fi
 
 # ---------------------------------------------------------
-# 2. Full system upgrade (single sync+upgrade, never a bare -Sy)
+# 2. System upgrade + prerequisites + yay in ONE transaction
+#    (always -Syu, never a bare -Sy; yay comes prebuilt from Chaotic-AUR)
 # ---------------------------------------------------------
-log "Updating system..."
-sudo pacman -Syu "${CONFIRM[@]}"
+log "Updating system and installing prerequisites..."
+PREREQS=(base-devel git rsync)
+if (( SKIP_CHAOTIC )) || command -v yay >/dev/null; then
+    sudo pacman -Syu --needed "${CONFIRM[@]}" "${PREREQS[@]}"
+elif ! sudo pacman -Syu --needed "${CONFIRM[@]}" "${PREREQS[@]}" yay; then
+    warn "yay is not available from the repos; building yay-bin instead."
+    sudo pacman -Syu --needed "${CONFIRM[@]}" "${PREREQS[@]}"
+fi
 
-# ---------------------------------------------------------
-# 3. yay (prebuilt from Chaotic-AUR when available, else build yay-bin)
-# ---------------------------------------------------------
-log "Setting up yay..."
-sudo pacman -S --needed "${CONFIRM[@]}" base-devel git rsync curl
 if ! command -v yay >/dev/null; then
-    if pacman -Si yay >/dev/null 2>&1; then
-        sudo pacman -S --needed "${CONFIRM[@]}" yay
-    else
-        tmp="$(mktemp -d)"
-        git clone --depth 1 https://aur.archlinux.org/yay-bin.git "$tmp/yay-bin"
-        ( cd "$tmp/yay-bin" && makepkg -si "${CONFIRM[@]}" )
-        rm -rf "$tmp"
-    fi
-else
-    echo "yay is already installed."
+    tmp="$(mktemp -d)"
+    git clone --depth 1 https://aur.archlinux.org/yay-bin.git "$tmp/yay-bin"
+    ( cd "$tmp/yay-bin" && makepkg -si "${CONFIRM[@]}" )
+    rm -rf "$tmp"
 fi
 
-# Use all cores when building AUR packages
-export MAKEFLAGS="-j$(nproc)"
-
 # ---------------------------------------------------------
-# 4. Remove conflicting notification daemon (dunst) before swaync
+# 3. Packages (only missing ones, one transaction)
 # ---------------------------------------------------------
-log "Checking for conflicting packages (dunst)..."
-if pacman -Q dunst >/dev/null 2>&1; then
+# Remove the conflicting notification daemon (swaync replaces it)
+if pacman -Qq dunst >/dev/null 2>&1; then
+    log "Removing conflicting package: dunst"
     sudo pacman -Rns "${CONFIRM[@]}" dunst
-    pkill -x dunst 2>/dev/null || true
-    echo "dunst removed."
-else
-    echo "dunst not installed."
+    pkill -x dunst || true
 fi
 
-# ---------------------------------------------------------
-# 5. Packages (deduplicated, only missing ones, one transaction)
-# ---------------------------------------------------------
 log "Installing packages..."
 PACKAGES=(
     # Fonts
@@ -138,8 +170,8 @@ PACKAGES=(
     xdg-desktop-portal-gtk xdg-desktop-portal-hyprland archlinux-xdg-menu
     # Hardware control
     ddcutil i2c-tools
-    # Shell / CLI
-    git base-devel github-cli less bash bash-completion starship rsync
+    # Shell / CLI (bash, less, git, base-devel, rsync are already covered by base/PREREQS)
+    github-cli bash-completion starship
     # Theming
     qt6ct-kde nwg-look bibata-cursor-theme darkly-qt6 python-pywalfox
     # Apps
@@ -147,7 +179,7 @@ PACKAGES=(
 )
 
 # pacman -T prints only the packages that are NOT yet satisfied (exit 127 if any)
-mapfile -t TO_INSTALL < <(printf '%s\n' "${PACKAGES[@]}" | sort -u | xargs pacman -T || true)
+mapfile -t TO_INSTALL < <(pacman -T "${PACKAGES[@]}" || true)
 
 FAILED=()
 if (( ${#TO_INSTALL[@]} == 0 )); then
@@ -160,15 +192,18 @@ elif ! yay -S --needed "${CONFIRM[@]}" "${TO_INSTALL[@]}"; then
 fi
 
 # ---------------------------------------------------------
-# 6. System permissions & configuration
+# 4. System permissions & configuration
 # ---------------------------------------------------------
 log "Applying system configuration..."
+NEED_RELOGIN=0
 
 # i2c access for ddcutil (monitor brightness)
-if getent group i2c >/dev/null; then
-    id -nG "$USER" | grep -qw i2c || { sudo usermod -aG i2c "$USER"; echo "Added $USER to i2c group (re-login required)."; }
-else
+if ! getent group i2c >/dev/null; then
     warn "i2c group does not exist; skipping usermod."
+elif ! id -nG "$USER" | grep -qw i2c; then
+    sudo usermod -aG i2c "$USER"
+    NEED_RELOGIN=1
+    echo "Added $USER to the i2c group."
 fi
 echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf >/dev/null
 sudo modprobe i2c-dev 2>/dev/null || true
@@ -181,138 +216,76 @@ else
 fi
 
 # ---------------------------------------------------------
-# 7. Deploy dotfiles (existing files are backed up, nothing silently lost)
+# 5. Deploy dotfiles with ONE rsync (replaced files are backed up, nothing silently lost)
 # ---------------------------------------------------------
 log "Deploying dotfiles..."
-BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$HOME/.dotfiles-backup/$STAMP"
+SOURCES=()
+for item in .config .local Pictures .bash_profile .bashrc; do
+    if [[ -e "$SCRIPT_DIR/$item" ]]; then SOURCES+=("$item"); else warn "$item not found in repo; skipping."; fi
+done
+
 mkdir -p "$BACKUP_DIR"
+# -R keeps each source's relative path, so .config -> ~/.config, .bashrc -> ~/.bashrc, and backups mirror the same layout
+( cd "$SCRIPT_DIR" && rsync -aR --backup --backup-dir="$BACKUP_DIR" "${SOURCES[@]}" "$HOME/" )
 
-deploy() {  # deploy <src-dir-name> <dest-dir>
-    local name="$1" dest="$2"
-    if [[ ! -d "$SCRIPT_DIR/$name" ]]; then
-        warn "$name not found in repo; skipping."
-        return 0
-    fi
-    mkdir -p "$dest" "$BACKUP_DIR/$name"
-    rsync -a --backup --backup-dir="$BACKUP_DIR/$name" "$SCRIPT_DIR/$name/" "$dest/"
-    echo "Deployed $name -> $dest"
-}
-
-deploy .config   "$HOME/.config"
-deploy .local    "$HOME/.local"
-deploy .themes   "$HOME/.themes"
-deploy Pictures  "$HOME/Pictures"
-
-if [[ -f "$SCRIPT_DIR/.bashrc" ]]; then
-    [[ -f "$HOME/.bashrc" ]] && ! cmp -s "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc" && cp -a "$HOME/.bashrc" "$BACKUP_DIR/.bashrc"
-    cp "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc"
+# Make user scripts executable (only the ones that aren't yet)
+if [[ -d "$HOME/.local/bin" ]]; then
+    find "$HOME/.local/bin" -maxdepth 1 -type f ! -perm -u+x -exec chmod u+x {} +
 fi
-
-# Make user scripts executable
-[[ -d "$HOME/.local/bin" ]] && find "$HOME/.local/bin" -maxdepth 1 -type f -exec chmod +x {} +
 
 # Drop the backup dir if nothing was replaced
-find "$BACKUP_DIR" -type d -empty -delete 2>/dev/null || true
-[[ -d "$BACKUP_DIR" ]] && echo "Replaced files were backed up to: $BACKUP_DIR"
+find "$BACKUP_DIR" -depth -type d -empty -delete 2>/dev/null || true
+if [[ -d "$BACKUP_DIR" ]]; then echo "Replaced files were backed up to: $BACKUP_DIR"; fi
 
 # ---------------------------------------------------------
-# 8. Wallpaper daemon + initial theme (needs a running Wayland session)
-# ---------------------------------------------------------
-log "Initializing wallpaper..."
-if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-    if ! pgrep -x awww-daemon >/dev/null; then
-        setsid -f awww-daemon >/dev/null 2>&1
-        for _ in {1..10}; do pgrep -x awww-daemon >/dev/null && break; sleep 0.5; done
-    fi
-    if [[ -x "$HOME/.local/bin/wallset" ]]; then
-        "$HOME/.local/bin/wallset" -n || warn "wallset failed; run it manually after login."
-    fi
-else
-    echo "No Wayland session detected; run 'wallset -n' after logging into Hyprland."
-fi
-
-# ---------------------------------------------------------
-# 9. Enable & start services (so a reboot isn't needed to use the setup)
+# 6. Services that don't need a Hyprland session
 # ---------------------------------------------------------
 log "Enabling and starting services..."
 
-sys_enable_now() {   # sys_enable_now <unit>
-    if systemctl cat "$1" >/dev/null 2>&1; then
-        if sudo systemctl enable --now "$1"; then echo "enabled + started: $1"
-        else warn "could not enable/start $1"; fi
-    else
-        echo "unit not found, skipping: $1"
-    fi
-}
+# Refresh the font cache (only stale directories, so it stays fast)
+fc-cache >/dev/null 2>&1 || warn "fc-cache failed."
 
-user_enable_now() {  # user_enable_now <unit>
-    if systemctl --user cat "$1" >/dev/null 2>&1; then
-        if systemctl --user enable --now "$1"; then echo "enabled + started (user): $1"
-        else warn "could not enable/start user unit $1"; fi
-    else
-        echo "user unit not found, skipping: $1"
-    fi
-}
-
-# Detached start, equivalent to `cmd & disown` but also survives the terminal closing.
-# Output goes to /dev/null so the process doesn't keep the log pipe open.
-start_bg() {         # start_bg <command> [args...]
-    local bin="$1"
-    if ! command -v "$bin" >/dev/null 2>&1; then
-        warn "not found, skipping: $bin"
-        return 0
-    fi
-    local running=1
-    if (( $# > 1 )); then
-        pgrep -f -- "$*" >/dev/null || running=0
-    else
-        pgrep -f -- "(^|/)${bin##*/}( |$)" >/dev/null || running=0
-    fi
-    if (( running )); then
-        echo "already running: $*"
-    else
-        if setsid -f "$@" >/dev/null 2>&1; then echo "started: $*"; else warn "failed to start: $*"; fi
-    fi
-}
-
-# Refresh the font cache so the newly installed fonts work immediately
-fc-cache -f >/dev/null 2>&1 || warn "fc-cache failed."
-
-# --- System services ---
-# NetworkManager: only if no other network manager is enabled (avoid breaking existing networking)
-if systemctl is-enabled --quiet NetworkManager.service 2>/dev/null; then
-    sys_enable_now NetworkManager.service
-elif systemctl is-enabled --quiet systemd-networkd.service iwd.service dhcpcd.service connman.service 2>/dev/null; then
-    echo "Another network manager is enabled; leaving NetworkManager alone."
+# NetworkManager: skip only if ANOTHER network manager is the one enabled (avoid breaking existing networking)
+if systemctl is-enabled --quiet NetworkManager.service 2>/dev/null \
+   || ! systemctl is-enabled --quiet systemd-networkd.service iwd.service dhcpcd.service connman.service 2>/dev/null; then
+    enable_now NetworkManager.service
 else
-    sys_enable_now NetworkManager.service
+    echo "Another network manager is enabled; leaving NetworkManager alone."
 fi
-# swayosd: libinput backend (caps lock / num lock OSD)
-sys_enable_now swayosd-libinput-backend.service
+enable_now swayosd-libinput-backend.service   # caps/num lock OSD backend
 
-# --- User services (need a running systemd user session) ---
+# User services (need a running systemd user session)
 if systemctl --user show-environment >/dev/null 2>&1; then
     for unit in pipewire.socket pipewire-pulse.socket wireplumber.service; do
-        user_enable_now "$unit"
+        enable_now --user "$unit"
     done
 else
     warn "No systemd user session available; user services will start at next login."
 fi
 
-# --- Session programs: mirrors the exec-once list in the Hyprland config ---
+# ---------------------------------------------------------
+# 7. Hyprland session: wallpaper, theme, and exec-once programs
+# ---------------------------------------------------------
 if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
-    # Export the session environment to systemd/D-Bus first, so user services and portals see it
-    if command -v dbus-update-activation-environment >/dev/null 2>&1; then
-        dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME \
-            2>/dev/null || warn "dbus-update-activation-environment failed."
+    log "Starting session programs..."
+    # Scripts deployed to ~/.local/bin (wallset, hyprsunset.sh) must resolve by name, as in exec-once
+    case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+
+    # Wallpaper daemon + initial theme first, so waybar/swaync start with the generated colors
+    start_bg awww-daemon
+    for _ in {1..10}; do pgrep -x awww-daemon >/dev/null && break; sleep 0.5; done
+    if [[ -x "$HOME/.local/bin/wallset" ]]; then
+        "$HOME/.local/bin/wallset" -n || warn "wallset failed; run it manually."
     fi
-    # Pick up the newly installed portals without a re-login
+
+    # Export the session environment to systemd/D-Bus, then restart portals so they see it
+    dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME \
+        2>/dev/null || warn "dbus-update-activation-environment failed."
     systemctl --user try-restart xdg-desktop-portal-hyprland.service \
         xdg-desktop-portal-gtk.service xdg-desktop-portal.service 2>/dev/null || true
 
-    # Make sure scripts deployed to ~/.local/bin (e.g. hyprsunset.sh) resolve by name, as in exec-once
-    case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
-
+    # Mirrors the exec-once list in the Hyprland config
     start_bg swaync
     start_bg swayosd-server
     start_bg nm-applet
@@ -321,32 +294,29 @@ if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
     start_bg hyprsunset
     start_bg hypridle
     start_bg /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-    # awww-daemon is already started in the wallpaper step above
     start_bg wl-paste --type text  --watch cliphist store
     start_bg wl-paste --type image --watch cliphist store
 
     if hyprctl reload >/dev/null 2>&1; then echo "Reloaded Hyprland config."
     else warn "hyprctl reload failed."; fi
 else
-    echo "Not running inside a Hyprland session; session programs (waybar, swaync, ...) will start with Hyprland."
+    echo "Not inside a Hyprland session: run 'wallset -n' after logging in; waybar, swaync, etc. start with Hyprland."
 fi
 
 # ---------------------------------------------------------
-# 10. Summary & optional reboot
+# 8. Summary & optional reboot
 # ---------------------------------------------------------
 log "Installation complete. Log: $LOG"
-if (( ${#FAILED[@]} )); then
-    warn "These packages failed to install: ${FAILED[*]}"
-fi
+if (( ${#FAILED[@]} )); then warn "These packages failed to install: ${FAILED[*]}"; fi
+if (( NEED_RELOGIN )); then echo "Services are already running; log out and back in (or reboot) to apply the i2c group change."; fi
 
 if (( NO_REBOOT )); then
-    echo "Skipping reboot (--no-reboot). Services are already running; log out/in (or reboot) to apply the i2c group change."
+    echo "Skipping reboot (--no-reboot)."
 elif (( ASSUME_YES )); then
     echo "Rebooting in 10 seconds (Ctrl+C to cancel)..."
     sleep 10
     systemctl reboot
 else
-    echo "Services are already running; a reboot is only needed for the i2c group change (re-login also works)."
     read -r -p "Reboot now? [y/N] " ans
-    [[ "$ans" =~ ^[Yy]$ ]] && systemctl reboot || echo "Reboot later to apply changes."
+    if [[ "$ans" =~ ^[Yy]$ ]]; then systemctl reboot; fi
 fi
