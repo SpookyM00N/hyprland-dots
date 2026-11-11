@@ -232,7 +232,104 @@ else
 fi
 
 # ---------------------------------------------------------
-# 9. Summary & optional reboot
+# 9. Enable & start services (so a reboot isn't needed to use the setup)
+# ---------------------------------------------------------
+log "Enabling and starting services..."
+
+sys_enable_now() {   # sys_enable_now <unit>
+    if systemctl cat "$1" >/dev/null 2>&1; then
+        if sudo systemctl enable --now "$1"; then echo "enabled + started: $1"
+        else warn "could not enable/start $1"; fi
+    else
+        echo "unit not found, skipping: $1"
+    fi
+}
+
+user_enable_now() {  # user_enable_now <unit>
+    if systemctl --user cat "$1" >/dev/null 2>&1; then
+        if systemctl --user enable --now "$1"; then echo "enabled + started (user): $1"
+        else warn "could not enable/start user unit $1"; fi
+    else
+        echo "user unit not found, skipping: $1"
+    fi
+}
+
+# Detached start, equivalent to `cmd & disown` but also survives the terminal closing.
+# Output goes to /dev/null so the process doesn't keep the log pipe open.
+start_bg() {         # start_bg <command> [args...]
+    local bin="$1"
+    if ! command -v "$bin" >/dev/null 2>&1; then
+        warn "not found, skipping: $bin"
+        return 0
+    fi
+    local running=1
+    if (( $# > 1 )); then
+        pgrep -f -- "$*" >/dev/null || running=0
+    else
+        pgrep -f -- "(^|/)${bin##*/}( |$)" >/dev/null || running=0
+    fi
+    if (( running )); then
+        echo "already running: $*"
+    else
+        if setsid -f "$@" >/dev/null 2>&1; then echo "started: $*"; else warn "failed to start: $*"; fi
+    fi
+}
+
+# Refresh the font cache so the newly installed fonts work immediately
+fc-cache -f >/dev/null 2>&1 || warn "fc-cache failed."
+
+# --- System services ---
+# NetworkManager: only if no other network manager is enabled (avoid breaking existing networking)
+if systemctl is-enabled --quiet NetworkManager.service 2>/dev/null; then
+    sys_enable_now NetworkManager.service
+elif systemctl is-enabled --quiet systemd-networkd.service iwd.service dhcpcd.service connman.service 2>/dev/null; then
+    echo "Another network manager is enabled; leaving NetworkManager alone."
+else
+    sys_enable_now NetworkManager.service
+fi
+# swayosd: libinput backend (caps lock / num lock OSD)
+sys_enable_now swayosd-libinput-backend.service
+
+# --- User services (need a running systemd user session) ---
+if systemctl --user show-environment >/dev/null 2>&1; then
+    for unit in pipewire.socket pipewire-pulse.socket wireplumber.service; do
+        user_enable_now "$unit"
+    done
+else
+    warn "No systemd user session available; user services will start at next login."
+fi
+
+# --- Session programs: mirrors the exec-once list in the Hyprland config ---
+if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
+    # Export the session environment to systemd/D-Bus first, so user services and portals see it
+    if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+        dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_QPA_PLATFORMTHEME \
+            2>/dev/null || warn "dbus-update-activation-environment failed."
+    fi
+    # Pick up the newly installed portals without a re-login
+    systemctl --user try-restart xdg-desktop-portal-hyprland.service \
+        xdg-desktop-portal-gtk.service xdg-desktop-portal.service 2>/dev/null || true
+
+    start_bg swaync
+    start_bg swayosd-server
+    start_bg nm-applet
+    start_bg waybar        # your config uses $bar; adjust if it is not waybar
+    [[ -x "$HOME/.local/bin/hyprsunset.sh" ]] && start_bg "$HOME/.local/bin/hyprsunset.sh" init
+    start_bg hyprsunset
+    start_bg hypridle
+    start_bg /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+    # awww-daemon is already started in the wallpaper step above
+    start_bg wl-paste --type text  --watch cliphist store
+    start_bg wl-paste --type image --watch cliphist store
+
+    if hyprctl reload >/dev/null 2>&1; then echo "Reloaded Hyprland config."
+    else warn "hyprctl reload failed."; fi
+else
+    echo "Not running inside a Hyprland session; session programs (waybar, swaync, ...) will start with Hyprland."
+fi
+
+# ---------------------------------------------------------
+# 10. Summary & optional reboot
 # ---------------------------------------------------------
 log "Installation complete. Log: $LOG"
 if (( ${#FAILED[@]} )); then
@@ -240,12 +337,13 @@ if (( ${#FAILED[@]} )); then
 fi
 
 if (( NO_REBOOT )); then
-    echo "Skipping reboot (--no-reboot). Reboot to apply group and module changes."
+    echo "Skipping reboot (--no-reboot). Services are already running; log out/in (or reboot) to apply the i2c group change."
 elif (( ASSUME_YES )); then
     echo "Rebooting in 10 seconds (Ctrl+C to cancel)..."
     sleep 10
     systemctl reboot
 else
+    echo "Services are already running; a reboot is only needed for the i2c group change (re-login also works)."
     read -r -p "Reboot now? [y/N] " ans
     [[ "$ans" =~ ^[Yy]$ ]] && systemctl reboot || echo "Reboot later to apply changes."
 fi
