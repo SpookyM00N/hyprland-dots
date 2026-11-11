@@ -1,22 +1,20 @@
 #!/usr/bin/env bash
 # Hyprland dotfiles installer for a fresh Arch Linux install.
-# Usage: ./install.sh [--yes] [--no-reboot] [--skip-chaotic]
-#   --yes          unattended: pass --noconfirm to pacman/yay, auto-reboot after countdown
+# Usage: ./install.sh [--yes] [--no-reboot]
+#   --yes          unattended: pass --noconfirm to pacman/yay, add Chaotic-AUR without asking, auto-reboot after countdown
 #   --no-reboot    never reboot at the end
-#   --skip-chaotic don't add Chaotic-AUR (yay is then built from the AUR)
 
 set -Eeuo pipefail
 
 # ---------------------------------------------------------
 # Options, logging, helpers
 # ---------------------------------------------------------
-ASSUME_YES=0 NO_REBOOT=0 SKIP_CHAOTIC=0
+ASSUME_YES=0 NO_REBOOT=0
 for arg in "$@"; do
     case "$arg" in
         -y|--yes)       ASSUME_YES=1 ;;
         --no-reboot)    NO_REBOOT=1 ;;
-        --skip-chaotic) SKIP_CHAOTIC=1 ;;
-        -h|--help)      sed -n '2,7p' "$0"; exit 0 ;;
+        -h|--help)      sed -n '2,5p' "$0"; exit 0 ;;
         *) echo "Unknown option: $arg" >&2; exit 2 ;;
     esac
 done
@@ -37,19 +35,19 @@ cleanup() { if [[ -n "$SUDO_PID" ]]; then kill "$SUDO_PID" 2>/dev/null || true; 
 trap cleanup EXIT
 trap 'die "Failed at line $LINENO: $BASH_COMMAND (log: $LOG)"' ERR
 
-# enable_now [--user] <unit>: enable + start a systemd unit if it exists
+# enable_now [--user] <unit>...: enable + start every listed unit that exists, in ONE systemctl call
 enable_now() {
-    local scope=() as_root=(sudo)
+    local scope=() as_root=(sudo) units=() u
     if [[ $1 == --user ]]; then scope=(--user); as_root=(); shift; fi
-    local unit="$1"
-    if ! systemctl "${scope[@]}" cat "$unit" >/dev/null 2>&1; then
-        echo "unit not found, skipping: $unit"
-        return 0
-    fi
-    if "${as_root[@]}" systemctl "${scope[@]}" enable --now "$unit"; then
-        echo "enabled + started: $unit"
+    for u in "$@"; do
+        if systemctl "${scope[@]}" cat "$u" >/dev/null 2>&1; then units+=("$u")
+        else echo "unit not found, skipping: $u"; fi
+    done
+    if (( ${#units[@]} == 0 )); then return 0; fi
+    if "${as_root[@]}" systemctl "${scope[@]}" enable --now "${units[@]}"; then
+        echo "enabled + started: ${units[*]}"
     else
-        warn "could not enable/start $unit"
+        warn "could not enable/start: ${units[*]}"
     fi
 }
 
@@ -98,33 +96,31 @@ SUDO_PID=$!
 export MAKEFLAGS="-j$(nproc)"
 
 # ---------------------------------------------------------
-# 1. pacman.conf: multilib (needed by Steam) + Chaotic-AUR
+# 1. pacman.conf: Chaotic-AUR (optional, asked once)
 # ---------------------------------------------------------
 log "Configuring pacman..."
-need_multilib=0 need_chaotic=0
-grep -q '^\[multilib\]' /etc/pacman.conf || need_multilib=1
-if (( ! SKIP_CHAOTIC )); then grep -q '^\[chaotic-aur\]' /etc/pacman.conf || need_chaotic=1; fi
-
-if (( need_multilib || need_chaotic )); then
-    sudo cp /etc/pacman.conf "/etc/pacman.conf.bak.$STAMP"
+USE_CHAOTIC=0
+if grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
+    USE_CHAOTIC=1
+    echo "Chaotic-AUR already configured."
 else
-    echo "pacman.conf already configured."
-fi
-
-if (( need_multilib )); then
-    echo "Enabling [multilib] (required for Steam)..."
-    sudo sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
-    grep -q '^\[multilib\]' /etc/pacman.conf || warn "Could not enable [multilib]; enable it manually."
-fi
-
-if (( need_chaotic )); then
-    echo "Adding Chaotic-AUR..."
-    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-    sudo pacman-key --lsign-key 3056513887B78AEB
-    sudo pacman -U "${CONFIRM[@]}" \
-        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-        'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-    printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+    ans=y
+    if (( ! ASSUME_YES )); then
+        read -r -p "Add the Chaotic-AUR repo (prebuilt AUR packages, much faster installs)? [Y/n] " ans || ans=y
+    fi
+    if [[ $ans =~ ^[Nn] ]]; then
+        echo "Skipping Chaotic-AUR; AUR packages will be built from source."
+    else
+        USE_CHAOTIC=1
+        echo "Adding Chaotic-AUR..."
+        sudo cp /etc/pacman.conf "/etc/pacman.conf.bak.$STAMP"
+        sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+        sudo pacman-key --lsign-key 3056513887B78AEB
+        sudo pacman -U "${CONFIRM[@]}" \
+            'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+            'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+        printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' | sudo tee -a /etc/pacman.conf >/dev/null
+    fi
 fi
 
 # ---------------------------------------------------------
@@ -133,7 +129,7 @@ fi
 # ---------------------------------------------------------
 log "Updating system and installing prerequisites..."
 PREREQS=(base-devel git rsync)
-if (( SKIP_CHAOTIC )) || command -v yay >/dev/null; then
+if (( ! USE_CHAOTIC )) || command -v yay >/dev/null; then
     sudo pacman -Syu --needed "${CONFIRM[@]}" "${PREREQS[@]}"
 elif ! sudo pacman -Syu --needed "${CONFIRM[@]}" "${PREREQS[@]}" yay; then
     warn "yay is not available from the repos; building yay-bin instead."
@@ -175,7 +171,7 @@ PACKAGES=(
     # Theming
     qt6ct-kde nwg-look bibata-cursor-theme darkly-qt6 python-pywalfox
     # Apps
-    ark onlyoffice-bin steam gamescope heroic-games-launcher-bin
+    ark onlyoffice-bin
 )
 
 # pacman -T prints only the packages that are NOT yet satisfied (exit 127 if any)
@@ -200,12 +196,15 @@ NEED_RELOGIN=0
 # i2c access for ddcutil (monitor brightness)
 if ! getent group i2c >/dev/null; then
     warn "i2c group does not exist; skipping usermod."
-elif ! id -nG "$USER" | grep -qw i2c; then
-    sudo usermod -aG i2c "$USER"
-    NEED_RELOGIN=1
-    echo "Added $USER to the i2c group."
+else
+    # Check /etc/group (not `id`, which only reflects the current login session), so re-runs don't repeat usermod
+    if [[ ",$(getent group i2c | cut -d: -f4)," != *",$USER,"* ]]; then
+        sudo usermod -aG i2c "$USER"
+        echo "Added $USER to the i2c group."
+    fi
+    if ! id -nG | grep -qw i2c; then NEED_RELOGIN=1; fi
 fi
-echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf >/dev/null
+if [[ ! -f /etc/modules-load.d/i2c-dev.conf ]]; then echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf >/dev/null; fi
 sudo modprobe i2c-dev 2>/dev/null || true
 
 # Application menu (for Dolphin/Ark "open with" etc.)
@@ -221,7 +220,7 @@ fi
 log "Deploying dotfiles..."
 BACKUP_DIR="$HOME/.dotfiles-backup/$STAMP"
 SOURCES=()
-for item in .config .local Pictures .bash_profile .bashrc; do
+for item in .config .local .themes Pictures .bashrc; do
     if [[ -e "$SCRIPT_DIR/$item" ]]; then SOURCES+=("$item"); else warn "$item not found in repo; skipping."; fi
 done
 
@@ -246,20 +245,20 @@ log "Enabling and starting services..."
 # Refresh the font cache (only stale directories, so it stays fast)
 fc-cache >/dev/null 2>&1 || warn "fc-cache failed."
 
-# NetworkManager: skip only if ANOTHER network manager is the one enabled (avoid breaking existing networking)
+# System units. NetworkManager is skipped only if ANOTHER network manager is the one enabled
+# (avoids breaking existing networking). swayosd backend = caps/num lock OSD.
+SYSTEM_UNITS=(swayosd-libinput-backend.service)
 if systemctl is-enabled --quiet NetworkManager.service 2>/dev/null \
    || ! systemctl is-enabled --quiet systemd-networkd.service iwd.service dhcpcd.service connman.service 2>/dev/null; then
-    enable_now NetworkManager.service
+    SYSTEM_UNITS+=(NetworkManager.service)
 else
     echo "Another network manager is enabled; leaving NetworkManager alone."
 fi
-enable_now swayosd-libinput-backend.service   # caps/num lock OSD backend
+enable_now "${SYSTEM_UNITS[@]}"
 
-# User services (need a running systemd user session)
+# User units (need a running systemd user session)
 if systemctl --user show-environment >/dev/null 2>&1; then
-    for unit in pipewire.socket pipewire-pulse.socket wireplumber.service; do
-        enable_now --user "$unit"
-    done
+    enable_now --user pipewire.socket pipewire-pulse.socket wireplumber.service
 else
     warn "No systemd user session available; user services will start at next login."
 fi
@@ -274,7 +273,7 @@ if [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
 
     # Wallpaper daemon + initial theme first, so waybar/swaync start with the generated colors
     start_bg awww-daemon
-    for _ in {1..10}; do pgrep -x awww-daemon >/dev/null && break; sleep 0.5; done
+    for _ in {1..20}; do awww query >/dev/null 2>&1 && break; sleep 0.25; done   # ready = socket answers
     if [[ -x "$HOME/.local/bin/wallset" ]]; then
         "$HOME/.local/bin/wallset" -n || warn "wallset failed; run it manually."
     fi
@@ -317,6 +316,6 @@ elif (( ASSUME_YES )); then
     sleep 10
     systemctl reboot
 else
-    read -r -p "Reboot now? [y/N] " ans
+    read -r -p "Reboot now? [y/N] " ans || ans=n
     if [[ "$ans" =~ ^[Yy]$ ]]; then systemctl reboot; fi
 fi
