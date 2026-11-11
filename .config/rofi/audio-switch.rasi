@@ -20,8 +20,8 @@ window {
     width:              20em;
     location:           northeast;
     anchor:             northeast;
-    x-offset:  -0.4em;
-    y-offset:  0.4em;
+    x-offset:  0.6em;
+    y-offset:  0.6em;
 }
 
 inputbar {
