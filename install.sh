@@ -158,7 +158,7 @@ PACKAGES=(
     # Fonts
     ttf-jetbrains-mono ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-common
     ttf-nerd-fonts-symbols-mono ttf-noto-nerd noto-fonts-cjk noto-fonts-emoji
-    ttf-cascadia-code-nerd cantarell-fonts ttf-ms-fonts
+    ttf-cascadia-code-nerd cantarell-fonts
     # Desktop / Hyprland ecosystem
     waybar fastfetch pavucontrol-qt swaync libnotify hyprsunset hypridle hyprlock
     playerctl hyprshot hyprpicker awww imagemagick rofi wl-clipboard cliphist
@@ -171,7 +171,7 @@ PACKAGES=(
     # Theming
     qt6ct-kde nwg-look bibata-cursor-theme darkly-qt6 python-pywalfox
     # Apps
-    ark onlyoffice-bin
+    ark
 )
 
 # pacman -T prints only the packages that are NOT yet satisfied (exit 127 if any)
