@@ -177,14 +177,40 @@ PACKAGES=(
 # pacman -T prints only the packages that are NOT yet satisfied (exit 127 if any)
 mapfile -t TO_INSTALL < <(pacman -T "${PACKAGES[@]}" || true)
 
+# Split into packages available in the sync repos (official + Chaotic if enabled) and AUR-only ones.
+# Repo packages go through ONE pacman transaction (single prompt, installed even if an AUR build fails);
+# AUR packages go through yay afterwards, batched into one install prompt.
+REPO_PKGS=(); AUR_PKGS=()
+if (( ${#TO_INSTALL[@]} )); then
+    mapfile -t REPO_PKGS < <(pacman -Slq | grep -Fxf <(printf '%s\n' "${TO_INSTALL[@]}") || true)
+    mapfile -t AUR_PKGS  < <(printf '%s\n' "${TO_INSTALL[@]}" | grep -Fxvf <(printf '%s\n' "${REPO_PKGS[@]}") || true)
+fi
+
 FAILED=()
 if (( ${#TO_INSTALL[@]} == 0 )); then
     echo "All packages already installed."
-elif ! yay -S --needed "${CONFIRM[@]}" "${TO_INSTALL[@]}"; then
-    warn "Bulk install failed; retrying packages one by one to isolate the culprit(s)..."
-    for pkg in "${TO_INSTALL[@]}"; do
-        yay -S --needed "${CONFIRM[@]}" "$pkg" || FAILED+=("$pkg")
-    done
+fi
+
+if (( ${#REPO_PKGS[@]} )); then
+    echo "Installing ${#REPO_PKGS[@]} repo packages in one transaction..."
+    if ! sudo pacman -S --needed "${CONFIRM[@]}" "${REPO_PKGS[@]}"; then
+        # Retry individually, without re-prompting: the list was already approved above
+        warn "Repo transaction failed; retrying packages one by one to isolate the culprit(s)..."
+        for pkg in "${REPO_PKGS[@]}"; do
+            sudo pacman -S --needed --noconfirm "$pkg" || FAILED+=("$pkg")
+        done
+    fi
+fi
+
+if (( ${#AUR_PKGS[@]} )); then
+    echo "Building/installing ${#AUR_PKGS[@]} AUR packages: ${AUR_PKGS[*]}"
+    # --batchinstall: build everything first, then install with a single pacman call (one prompt)
+    if ! yay -S --needed --batchinstall "${CONFIRM[@]}" "${AUR_PKGS[@]}"; then
+        warn "AUR install failed; retrying packages one by one to isolate the culprit(s)..."
+        for pkg in "${AUR_PKGS[@]}"; do
+            yay -S --needed --noconfirm "$pkg" || FAILED+=("$pkg")
+        done
+    fi
 fi
 
 # ---------------------------------------------------------
@@ -220,7 +246,7 @@ fi
 log "Deploying dotfiles..."
 BACKUP_DIR="$HOME/.dotfiles-backup/$STAMP"
 SOURCES=()
-for item in .config .local Pictures .bash_profile .bashrc; do
+for item in .config .local .themes Pictures .bashrc; do
     if [[ -e "$SCRIPT_DIR/$item" ]]; then SOURCES+=("$item"); else warn "$item not found in repo; skipping."; fi
 done
 
